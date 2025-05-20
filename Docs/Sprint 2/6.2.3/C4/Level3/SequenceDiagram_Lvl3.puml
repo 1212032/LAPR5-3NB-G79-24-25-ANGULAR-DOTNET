@@ -1,0 +1,33 @@
+@startuml
+title "Request to delete patient profile"
+actor Patient
+participant "View" as View
+participant "Controller" as Controller
+participant "Service" as Service
+participant "BackEnd" as BackEnd
+
+Patient -> View : Request to delete profile
+activate View
+
+View->Controller: onInit()
+activate Controller
+
+Controller->Service: deletePatient() 
+activate Service
+
+Service->BackEnd: HTTP Request: DELETE /PatientUser
+activate BackEnd
+
+BackEnd-->Service: Return message
+deactivate BackEnd
+
+Service-->Controller: Return message
+deactivate Service
+
+Controller-->View: Return message
+deactivate Controller
+
+View-->Patient: Display message
+deactivate View
+
+@enduml

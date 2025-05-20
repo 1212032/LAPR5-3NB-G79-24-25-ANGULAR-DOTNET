@@ -1,0 +1,42 @@
+@startuml
+title "Edit Existing Patient Profile - Level 2"
+
+actor Admin
+participant "<<View>>\nSPA" as spa
+participant "BackEnd" as BackEnd
+
+Admin -> spa : Search for patient profile
+activate spa
+spa -> BackEnd : HTTP GET /patients/{id}
+activate BackEnd
+
+BackEnd -> BackEnd : Validate patient existence
+alt Patient profile found
+    BackEnd -> spa : Patient details
+    spa -> Admin : Display patient details
+
+    Admin -> spa : Edit patient details
+    spa -> BackEnd : HTTP PUT /patients/{id} (patient DTO)
+    activate BackEnd
+
+    BackEnd -> BackEnd : Check email and phone uniqueness
+    alt Email and Phone are Unique
+        BackEnd -> BackEnd : Update patient in database
+        BackEnd -> spa : Response status 200 (Updated)
+        spa -> Admin : Show success message
+    else Email already exists
+        BackEnd -> spa : Response status 400 (Email already exists)
+        spa -> Admin : Show error message
+    else Phone number already exists
+        BackEnd -> spa : Response status 400 (Phone number already exists)
+        spa -> Admin : Show error message
+    end
+else Patient profile not found
+    BackEnd -> spa : Response status 404 (Not Found)
+    spa -> Admin : Show not found message
+end
+
+deactivate BackEnd
+deactivate spa
+@enduml
+

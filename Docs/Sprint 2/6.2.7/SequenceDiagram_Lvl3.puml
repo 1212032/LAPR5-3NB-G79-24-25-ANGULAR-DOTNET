@@ -1,0 +1,71 @@
+@startuml
+title "Edit Existing Patient Profile - Level 3"
+
+actor Admin
+participant "<<View>>\nSPA" as spa
+participant "<<ViewModel>>\nEditPatientComponent" as component
+participant "<<Controller>>\nPatientService" as service
+participant "<<Model>>\nPatientDto" as model
+participant "BackEnd" as backend
+
+Admin -> spa : Search for patient profile
+activate spa
+spa -> component : Load EditPatientComponent
+activate component
+
+component -> service : GetPatientById(patientId)
+activate service
+service -> backend : HTTP GET /patients/{id}
+activate backend
+
+ref over backend
+    EditExistingPatientSprint1.puml
+end ref
+
+alt Patient profile found
+    backend -> service : Patient details
+    service -> component : Return patient details
+    component -> spa : Render form with patient data
+    deactivate component
+    spa -> Admin : Display forms
+
+    Admin -> spa : Edit patient details
+    spa -> component : Submit updated details
+    activate component
+
+    component -> model : Map form data to PatientDto
+    component -> service : UpdatePatient(patientId, PatientDto)
+    activate service
+    service -> backend : HTTP PUT /patients/{id} (PatientDto)
+    ref over backend
+        EditExistingPatientSprint1.puml
+    end ref
+
+    alt Email and Phone are Unique
+        backend -> service : Response status 200 (Updated)
+        service -> component : Success message
+        component -> spa : Show success message
+          spa -> Admin : Show success message
+    else Email already exists
+        backend -> service : Response status 400 (Email already exists)
+        service -> component : Display error message
+        component -> spa : Show error message
+        spa -> Admin : Show error message
+    else Phone number already exists
+        backend -> service : Response status 400 (Phone number already exists)
+        service -> component : Display error message
+        component -> spa : Show error message
+        spa -> Admin : Show error message
+    end
+else Patient profile not found
+    backend -> service : Response status 404 (Not Found)
+    service -> component : Display "Not Found" message
+    component -> spa : Show "Not Found" message
+    spa -> Admin : Show "Not Found" message
+end
+
+deactivate backend
+deactivate service
+deactivate component
+deactivate spa
+@enduml

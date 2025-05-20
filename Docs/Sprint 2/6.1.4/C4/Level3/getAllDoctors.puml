@@ -1,0 +1,19 @@
+@startuml
+title "Get All Doctors"
+
+participant "DoctorService" as service
+participant "DoctorRepository" as repo
+database "Database" as db
+
+->service:HTTP Request: GET /doctors
+activate service
+    service->repo: getAll()
+        activate repo
+        repo-> db: getAll()
+    repo-->service:doctorsDtoList
+    deactivate repo
+
+<--service:doctorDtoList
+deactivate service
+
+@enduml

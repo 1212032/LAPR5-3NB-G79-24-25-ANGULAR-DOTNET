@@ -1,0 +1,63 @@
+@startuml
+title "Search and Manage Patient Profiles - Level 3"
+
+actor Admin
+participant "<<ViewModel>>\nSearchPatientComponent" as component
+participant "<<Controller>>\nPatientService" as service
+participant "<<Model>>\nPatientModel" as model
+participant "BackEnd" as backend
+
+Admin -> component : Search patient profiles (submit form)
+activate component
+component -> component : Read form data
+component -> service : HTTP GET /patients/search?queryParams
+activate service
+service -> backend : SearchPatients(queryParams)
+activate backend
+    ref over backend
+        SearchPatientSprint1.puml
+    end ref
+alt Profiles found
+    backend -> service : Return list of PatientModel
+    service -> component : Return search results
+    component -> component : Populate patients list
+    component -> Admin : Display search results
+else No profiles found
+    backend -> service : Response status 404 (Not Found)
+    service -> component : No results message
+    component -> Admin : Show "No profiles found"
+end
+
+Admin -> component : Select a patient from results
+activate component
+component -> Admin : Display actions (Edit or Anonymize)
+
+alt Edit profile
+    Admin -> component : Select edit action
+    component -> service : HTTP GET /patients/{id}
+    service -> backend : GetPatientById(patientId)
+        ref over backend
+        EditExistingPatientSprint1.puml
+    end ref
+    backend -> service : Return PatientModel
+    service -> component : Return patient details
+    component -> component : Redirect to Edit Profile
+    component -> Admin : Show "Patient edited" message
+else Anonymize profile
+    Admin -> component : Select anonymization
+    component -> service : HTTP GET /patients/{id}
+
+    service -> backend : DeletePatient(patientId)
+                ref over backend
+        DeletePatientSprint1.puml
+    end ref
+    backend -> service : Response status 200 (Anonymized)
+    service -> component : Confirm anonymization
+    component -> Admin : Show "Patient anonymized" message
+
+end
+
+deactivate backend
+deactivate service
+deactivate component
+@enduml

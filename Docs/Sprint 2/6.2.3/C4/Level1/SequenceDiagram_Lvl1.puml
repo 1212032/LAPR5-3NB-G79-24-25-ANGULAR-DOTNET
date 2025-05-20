@@ -1,0 +1,13 @@
+@startuml
+title "Request to delete patient profile"
+
+actor Patient
+participant "System" as Sys
+
+Patient -> Sys : Request to delete profile
+activate Sys
+
+Sys --> Patient: Display success (delete or anonymize)
+deactivate Sys
+
+@enduml

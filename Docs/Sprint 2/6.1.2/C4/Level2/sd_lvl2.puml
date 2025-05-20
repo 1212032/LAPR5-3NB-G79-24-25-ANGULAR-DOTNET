@@ -1,0 +1,9 @@
+@startuml
+title "Register new backoffice users"
+participant "BackEnd" as BackEnd 
+
+-> BackEnd : Register new user request
+<-- BackEnd : Return setup link
+<-- BackEnd : Notify admin of successful registration
+
+@enduml

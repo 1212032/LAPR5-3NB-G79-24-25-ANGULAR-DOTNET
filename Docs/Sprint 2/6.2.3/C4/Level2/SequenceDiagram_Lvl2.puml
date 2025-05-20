@@ -1,0 +1,19 @@
+@startuml
+title "Request to delete patient profile"
+actor Patient
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Patient -> FrontEnd : Request to delete profile
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: DELETE /PatientUser\nRequest patient data
+activate BackEnd
+
+BackEnd --> FrontEnd: Return success (delete or anonymize)
+deactivate BackEnd
+
+FrontEnd --> Patient: Display success (delete or anonymize)
+deactivate FrontEnd
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title "Search and Manage Patient Profiles - Level 2"
+
+actor Admin
+participant "<<View>>\nSPA" as spa
+participant "BackEnd" as backend
+
+Admin -> spa : Search patient profiles (submit form)
+activate spa
+spa -> backend : HTTP GET /patients/search?queryParams
+activate backend
+    ref over backend
+        SearchPatientSprint1.puml
+    end ref
+alt Profiles found
+    backend -> spa : Return list of patient profiles
+    spa -> Admin : Display search results
+else No profiles found
+    backend -> spa : Response status 404 (Not Found)
+    spa -> Admin : Show "No profiles found"
+end
+
+Admin -> spa : Select a patient from results
+activate spa
+spa -> Admin : Display actions (Edit or Anonymize)
+
+alt Edit profile
+    spa -> backend : HTTP GET /patients/{id}
+    activate backend
+        ref over backend
+        EditExistingPatientSprint1.puml
+    end ref
+    backend -> spa : Return patient details
+    spa -> Admin : Show "Patient edited" message
+else Anonymize profile
+    spa -> backend : HTTP GET /patients/{id}
+    activate backend
+        ref over backend
+        DeletePatientSprint1.puml
+    end ref
+    backend -> spa : Response status 200 (Anonymized)
+    spa -> Admin : Show "Patient anonymized" message
+end
+
+deactivate backend
+deactivate spa
+@enduml

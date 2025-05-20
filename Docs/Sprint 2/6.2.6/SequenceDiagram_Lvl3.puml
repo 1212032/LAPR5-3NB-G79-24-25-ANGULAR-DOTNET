@@ -1,0 +1,71 @@
+@startuml
+title "Create New Patient Profile - Level 3"
+
+participant "<<View>>\nSPA" as spa
+participant "<<ViewModel>>\nCreatePatientComponent" as viewModel
+participant "<<Controller>>\nPatientService" as controller
+participant "<<Model>>\nPatientDto" as model
+participant "BackEnd" as BackEnd
+
+->spa: onInit()
+    activate spa
+    spa->viewModel: Load CreatePatientComponent
+    activate viewModel
+
+    viewModel->viewModel: Initialize form and bindings
+    viewModel-->spa: Render empty form
+    deactivate viewModel
+
+<--spa: Displays Create Patient Form
+deactivate spa
+
+->spa: Submit form
+    activate spa
+    spa->viewModel: submitPatientForm(formData)
+    activate viewModel
+
+    viewModel->viewModel: Validate form
+    alt Form invalid
+        viewModel-->spa: Highlight errors
+        <--spa: Display validation errors
+        
+        
+    else Form valid
+        viewModel->model: createPatient
+        viewModel->controller: createPatient(model)
+        activate controller
+        
+        controller->BackEnd: HTTP POST /patients (PatientDto)
+        activate BackEnd
+
+        ref over BackEnd
+            ./createPatientSprint1.puml
+        end ref
+
+        alt Valid Input
+            controller <-- BackEnd: Response 201 (Created)
+            viewModel <-- controller: Patient created successfully
+            spa <-- viewModel: Show success message
+            <--spa: Redirect to /admin
+        else Email already exists
+            controller <-- BackEnd: Response 400 (Email already exists)
+            viewModel <-- controller: Error: Email already exists
+            spa <-- viewModel: Display error message
+        else Phone number already exists
+            controller <-- BackEnd: Response 400 (Phone number already exists)
+            viewModel <-- controller: Error: Phone number already exists
+            spa <-- viewModel: Display error message
+        else Validation error
+            controller <-- BackEnd: Response 400 (Invalid input)
+            viewModel <-- controller: Validation errors
+            spa <-- viewModel: Highlight form errors
+            deactivate viewModel
+        end
+
+        deactivate BackEnd
+        deactivate controller
+    end
+
+    deactivate viewModel
+    deactivate spa
+@enduml

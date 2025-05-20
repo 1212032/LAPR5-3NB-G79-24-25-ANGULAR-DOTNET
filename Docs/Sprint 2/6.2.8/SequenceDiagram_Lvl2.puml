@@ -1,0 +1,31 @@
+@startuml
+title "Anonymize Patient Profile"
+
+actor Admin
+participant "<<System>>\nSPA" as SPA
+participant "BackEnd" as BackEnd
+
+Admin -> SPA : Search for patient profile
+activate SPA
+SPA -> BackEnd : HTTP GET /patients/{id}
+activate BackEnd
+
+alt Patient found
+    BackEnd --> SPA : Response status 200 (Patient details)
+    SPA --> Admin : Display patient details
+
+    Admin -> SPA : Confirm anonymization action
+    SPA -> BackEnd : HTTP PUT /patients/{id}/anonymize
+    
+    BackEnd -> BackEnd : Process anonymization
+    BackEnd --> SPA : Response status 200 (Anonymized)
+    SPA --> Admin : Display success message
+
+else Patient not found
+    BackEnd --> SPA : Response status 404 (Not Found)
+    SPA --> Admin : Display error message (Patient not found)
+end
+
+deactivate BackEnd
+deactivate SPA
+@enduml

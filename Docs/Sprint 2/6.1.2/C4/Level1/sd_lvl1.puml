@@ -1,0 +1,12 @@
+@startuml
+title "Register new backoffice users"
+actor Admin as A
+actor User as U
+
+A -> MEntraID : Login with Microsoft Entra ID
+MEntraID -> A : Admin authenticated
+participant "System" as BackofficeController
+A -> BackofficeController : Register new user (doctor, nurse, technician)
+
+@enduml
+
