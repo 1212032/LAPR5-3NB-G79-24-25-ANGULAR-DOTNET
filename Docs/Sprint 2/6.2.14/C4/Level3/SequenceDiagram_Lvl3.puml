@@ -1,0 +1,86 @@
+@startuml
+title "Request new operation"
+
+actor Doctor
+
+participant "<<View>>\nSPA" as spa
+participant "<<Controller>>\nCreateOperationRequestComponent" as viewModel
+participant "<<Service>>\nOperationRequestService" as service
+participant "Dto" as dto
+participant "BackEnd" as BackEnd
+
+
+Doctor->spa: onInit()
+    activate spa
+    spa->viewModel: onInit()
+    activate viewModel
+
+    viewModel-> service: getAllOperationTypes()
+    activate service
+    service->BackEnd: HTTP Request: GET /operationtypes
+    activate BackEnd
+    ref over BackEnd
+        ./getAllOperationTypes.puml
+    end ref
+    BackEnd-->service: operationtypesDtoList
+    deactivate BackEnd
+
+    service-->viewModel: operationtypesDtoList
+    deactivate service
+
+
+    viewModel-> service: getAllPatients()
+    activate service
+    service->BackEnd: HTTP Request: GET /patients
+    activate BackEnd
+    ref over BackEnd
+        ./getAllPatients.puml
+    end ref
+    BackEnd-->service: patientsDtoList
+    deactivate BackEnd
+
+    service-->viewModel: patientsDtoList
+    deactivate service
+
+    viewModel-->spa : render View 
+    deactivate viewModel
+
+Doctor<--spa: Displays forms
+deactivate spa
+
+
+Doctor->spa: request and operation
+    activate spa
+    spa->viewModel: createOperationRequest()
+    activate viewModel
+    viewModel-> dto: create
+    viewModel-> service : createOperationRequest(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: Post /operationrequests
+
+
+        ref over BackEnd
+                AddOperationRequest
+                ./Sprint1/US16/C4/level3/SequenceDiagram_Lvl3.puml
+        end ref
+
+alt Doctor not Allowed
+
+activate BackEnd
+        service<--BackEnd : status 405 
+        spa<--service:status 405
+Doctor<--spa:Displays status 405 message
+else    Patient/Doctor not found
+        service<--BackEnd : status 404 
+        spa<--service:status 404
+Doctor<--spa:Displays status 404 message
+else Operation Request successfully
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+        spa<--service:status 200
+        deactivate service
+Doctor<--spa:Displays status 200 message
+deactivate spa
+end
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+title "Request new operation"
+actor Doctor
+participant "FrontEnd" as spa
+participant "BackEnd" as BackEnd
+
+Doctor->spa: onInit()
+    activate spa
+
+    spa->BackEnd: Request: GET /operationtypes
+    activate BackEnd
+    BackEnd->BackEnd: getAll()
+    BackEnd-->spa: operationtypesDto array
+    deactivate BackEnd
+    
+    spa->BackEnd: HTTP Request: GET /patients
+    activate BackEnd
+    BackEnd->BackEnd: getAll()
+    BackEnd-->spa: patientsDto array
+    deactivate BackEnd
+Doctor<--spa: Display forms
+deactivate spa
+
+Doctor->spa: Request an operation
+activate spa
+spa-> BackEnd : HTTP Request: POST /operationrequests
+activate BackEnd
+BackEnd -> BackEnd : Add(DTO)
+
+alt Doctor not Allowed
+         spa<--BackEnd : status 405
+         Doctor<-spa: status 405 
+else Patient/Doctor not found
+         spa<-- BackEnd : status 404
+         Doctor<-spa: status 404 
+else Operation Request successfully
+         spa<--BackEnd : status 200
+         Doctor<-spa: status 200 
+deactivate spa
+deactivate BackEnd
+end
+
+@enduml

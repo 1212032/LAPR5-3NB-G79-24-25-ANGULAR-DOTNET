@@ -1,0 +1,71 @@
+@startuml
+title "Request to update staff"
+actor Admin
+participant "View" as View
+participant "Controller" as Controller
+participant "Service" as Service
+participant "BackEnd" as BackEnd
+
+Admin -> View : Request to update staff
+activate View
+
+View->Controller: onInit()
+activate Controller
+
+Controller->Service: getSpecializations() 
+activate Service
+
+Service->BackEnd: HTTP Request: GET /Specializations
+activate BackEnd
+
+BackEnd-->Service: specializations DTO list
+deactivate BackEnd
+
+Service-->Controller: specializations DTO list
+deactivate Service
+
+Controller->Service: getStaffById() 
+activate Service
+
+Service->BackEnd: HTTP Request: GET /Staff/id
+activate BackEnd
+
+BackEnd-->Service: staff DTO
+deactivate BackEnd
+
+Service-->Controller: staff DTO
+deactivate Service
+
+Controller-->View: Fill form
+deactivate Controller
+
+View-->Admin: Display form
+deactivate View
+
+
+
+Admin -> View : Submit
+activate View
+
+View->Controller: updateStaff()
+activate Controller
+
+Controller->Service: updateStaff(dto) 
+activate Service
+
+Service->BackEnd: HTTP Request: PUT /Staff/id
+activate BackEnd
+
+BackEnd-->Service: staff DTO
+deactivate BackEnd
+
+Service-->Controller: staff DTO
+deactivate Service
+
+Controller-->View: Return success
+deactivate Controller
+
+View-->Admin: Display success
+deactivate View
+
+@enduml

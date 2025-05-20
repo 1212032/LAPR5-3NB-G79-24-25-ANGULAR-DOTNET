@@ -1,0 +1,19 @@
+@startuml
+title "Request to update staff"
+
+actor Admin
+participant "System" as Sys
+
+Admin -> Sys : Request to update staff
+activate Sys
+
+Sys --> Admin: Display current data
+deactivate Sys
+
+Admin -> Sys : Change data and submit
+activate Sys
+
+Sys --> Admin: Display success
+deactivate Sys
+
+@enduml

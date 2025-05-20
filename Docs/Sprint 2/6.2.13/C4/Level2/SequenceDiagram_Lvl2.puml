@@ -1,0 +1,25 @@
+@startuml
+title "Request to list staff"
+actor Admin
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Admin -> FrontEnd : Request to list staff
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Specializations\nGet all specializations list
+activate BackEnd
+
+BackEnd --> FrontEnd: Return specializations
+deactivate BackEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Staff\nGet staff list
+activate BackEnd
+
+BackEnd --> FrontEnd: Return staff
+deactivate BackEnd
+
+FrontEnd --> Admin: Show list of staff
+deactivate FrontEnd
+
+@enduml

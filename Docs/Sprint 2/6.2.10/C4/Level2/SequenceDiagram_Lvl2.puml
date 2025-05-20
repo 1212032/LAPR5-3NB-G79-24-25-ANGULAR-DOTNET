@@ -1,0 +1,31 @@
+@startuml
+title "Request to create staff"
+actor Admin
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Admin -> FrontEnd : Request to create staff
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Specializations\nGet all specializations
+activate BackEnd
+
+BackEnd --> FrontEnd: Return specializations
+deactivate BackEnd
+
+FrontEnd --> Admin: Show form
+deactivate FrontEnd
+
+Admin -> FrontEnd : Input data and submit
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: POST /Staff\nSend data to create
+activate BackEnd
+
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+
+FrontEnd --> Admin: Display success
+deactivate FrontEnd
+
+@enduml

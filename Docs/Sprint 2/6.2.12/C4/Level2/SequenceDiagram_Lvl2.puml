@@ -1,0 +1,37 @@
+@startuml
+title "Request to inactivate staff"
+actor Admin
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Admin -> FrontEnd : Request to inactivate staff
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Specializations\nGet all specializations list
+activate BackEnd
+
+BackEnd --> FrontEnd: Return specializations
+deactivate BackEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Staff\nGet staff list
+activate BackEnd
+
+BackEnd --> FrontEnd: Return staff
+deactivate BackEnd
+
+FrontEnd --> Admin: Show list of current staff
+deactivate FrontEnd
+
+Admin -> FrontEnd : Select staff to inactivate
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: DELETE /Staff/id
+activate BackEnd
+
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+
+FrontEnd --> Admin: Display success
+deactivate FrontEnd
+
+@enduml

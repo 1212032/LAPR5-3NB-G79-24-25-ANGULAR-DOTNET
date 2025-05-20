@@ -1,0 +1,45 @@
+@startuml
+title "Request to list staff"
+actor Admin
+participant "View" as View
+participant "Controller" as Controller
+participant "Service" as Service
+participant "BackEnd" as BackEnd
+
+Admin -> View : Request to list staff
+activate View
+
+View->Controller: onInit()
+activate Controller
+
+Controller->Service: getSpecializations() 
+activate Service
+
+Service->BackEnd: HTTP Request: GET /Specializations
+activate BackEnd
+
+BackEnd-->Service: specializations DTO list
+deactivate BackEnd
+
+Service-->Controller: specializations DTO list
+deactivate Service
+
+Controller->Service: getStaff() 
+activate Service
+
+Service->BackEnd: HTTP Request: GET /Staff
+activate BackEnd
+
+BackEnd-->Service: staff DTO list
+deactivate BackEnd
+
+Service-->Controller: staff DTO list
+deactivate Service
+
+Controller-->View: Fill table form
+deactivate Controller
+
+View-->Admin: Display table form\nwith list of staff
+deactivate View
+
+@enduml

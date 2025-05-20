@@ -1,0 +1,37 @@
+@startuml
+title "Request to update staff"
+actor Admin
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Admin -> FrontEnd : Request to update staff
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Specializations\nGet all specializations
+activate BackEnd
+
+BackEnd --> FrontEnd: Return specializations
+deactivate BackEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Staff/id\nGet staff
+activate BackEnd
+
+BackEnd --> FrontEnd: Return staff
+deactivate BackEnd
+
+FrontEnd --> Admin: Show form with current data
+deactivate FrontEnd
+
+Admin -> FrontEnd : Change data and submit
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: PUT /Staff/id\nSend data to update
+activate BackEnd
+
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+
+FrontEnd --> Admin: Display success
+deactivate FrontEnd
+
+@enduml

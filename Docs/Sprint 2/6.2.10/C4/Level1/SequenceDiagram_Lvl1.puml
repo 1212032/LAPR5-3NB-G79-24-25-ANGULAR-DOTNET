@@ -1,0 +1,19 @@
+@startuml
+title "Request to create staff"
+
+actor Admin
+participant "System" as Sys
+
+Admin -> Sys : Request to create staff
+activate Sys
+
+Sys --> Admin: Request data
+deactivate Sys
+
+Admin -> Sys : Input data and submit
+activate Sys
+
+Sys --> Admin: Display success
+deactivate Sys
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+title "Request new operation"
+
+actor Doctor
+participant "<<System>>" as Sys
+
+
+
+Doctor -> Sys : Request an operation
+activate Sys
+        
+
+alt Doctor not Allowed
+        Doctor <--Sys : response status 405 
+else Patient/Doctor not found
+        Doctor <-- Sys : response status 404
+else Operation Request successfully
+        Doctor <--Sys : response status 200
+end
+deactivate Sys
+
+@enduml
