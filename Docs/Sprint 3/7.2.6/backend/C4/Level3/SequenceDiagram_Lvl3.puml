@@ -1,0 +1,56 @@
+@startuml
+title "Update Patient Medical Record"
+
+
+participant "MedicalRecordController" as controller
+participant "MedicalRecordService" as service
+
+participant "MedicalRecordRepo" as repo
+participant "MedicalRecordMap" as mapper
+participant "MedicalRecord" as mr
+participant "Dto" as dto
+database "Database" as db
+
+
+->controller: HTTP Request: PUT /medicalRecords
+activate controller
+alt User not Allowed
+    <--controller: status 401
+else 
+    controller-> service : updateMedicalRecord()
+    activate service
+    service-> repo: findByDomainId()
+    activate repo
+
+    repo-> db: findByDomainId()
+    repo->mapper : toDomain()
+        activate mapper
+        mapper->mr : create
+        mapper-->repo : medicalRecord
+        deactivate mapper
+        repo-->service : medicalRecord
+        deactivate repo
+        
+        service-> mr : update data
+
+        service->repo: save()
+        activate repo
+            repo->db : save()
+            repo-->service: medicalRecord
+        deactivate repo
+
+
+        service->mapper: toDTO()
+            activate mapper
+                mapper->dto : create
+                mapper-->service:dto
+            deactivate mapper
+        service-->controller: dto
+
+        deactivate service
+
+        <--controller: status 200
+        deactivate controller
+
+end
+@enduml

@@ -1,0 +1,1 @@
+predicao de entrada para todos os PLs: generate

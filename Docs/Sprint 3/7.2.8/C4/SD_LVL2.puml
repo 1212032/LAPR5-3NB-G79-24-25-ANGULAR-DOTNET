@@ -1,0 +1,49 @@
+@startuml
+title "Request to create appointment"
+actor Doctor
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Doctor -> FrontEnd : Request to create appointment
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /OperationRequests\nGet all operation requests
+activate BackEnd
+
+BackEnd --> FrontEnd: Return operation requests 
+deactivate BackEnd
+
+FrontEnd --> Doctor: Request to select operation request from list
+deactivate FrontEnd
+
+Doctor -> FrontEnd: Select operation request to transform
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /OperationTypes/id\nGet information about the operation type\nof the selected operation request
+activate BackEnd
+
+BackEnd --> FrontEnd: Return operation type
+deactivate BackEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /Staff\nGet staff list
+activate BackEnd
+
+BackEnd --> FrontEnd: Return list of staff
+deactivate BackEnd
+
+FrontEnd --> Doctor: Display form requiring date, time, room\nand staff based on the operation type
+deactivate FrontEnd
+
+Doctor -> FrontEnd: Input data and submit
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: POST /Appointment
+activate BackEnd
+
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+
+FrontEnd --> Doctor: Display success
+deactivate FrontEnd
+
+@enduml

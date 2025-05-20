@@ -1,0 +1,69 @@
+@startuml
+title "Request to update appointment"
+actor Doctor
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Doctor -> FrontEnd : Request to search appointments
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Staff\nGet all staff
+activate BackEnd
+BackEnd --> FrontEnd: Return staff
+deactivate BackEnd
+FrontEnd -> BackEnd: HTTP Request: GET /SurgeryRooms\nGet all surgery rooms
+activate BackEnd
+BackEnd --> FrontEnd: Return surgery rooms
+deactivate BackEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Appointments\nGet all appointments
+activate BackEnd
+BackEnd --> FrontEnd: Return appointments
+deactivate BackEnd
+FrontEnd --> Doctor: Display list of appointments
+deactivate FrontEnd
+
+opt
+Doctor -> FrontEnd: Change filters
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Appointments\nGet all appointments
+activate BackEnd
+BackEnd --> FrontEnd: Return appointments
+deactivate BackEnd
+FrontEnd --> Doctor: Display list of appointments
+deactivate FrontEnd
+end
+
+Doctor -> FrontEnd : Select appointment to update
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Appointments/id\nGet selected appointment
+activate BackEnd
+BackEnd --> FrontEnd: Return appointment
+deactivate BackEnd
+FrontEnd -> BackEnd: HTTP Request: GET /OperationRequests/id\nGet operation request of selected appointment
+activate BackEnd
+BackEnd --> FrontEnd: Return operation request
+deactivate BackEnd
+FrontEnd -> BackEnd: HTTP Request: GET /OperationTypes/id\nGet operation type of the operation request
+activate BackEnd
+BackEnd --> FrontEnd: Return operation type
+deactivate BackEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Staff\nGet all staff
+activate BackEnd
+BackEnd --> FrontEnd: Return staff
+deactivate BackEnd
+FrontEnd -> BackEnd: HTTP Request: GET /SurgeryRooms\nGet all rooms
+activate BackEnd
+BackEnd --> FrontEnd: Return rooms
+deactivate BackEnd
+FrontEnd --> Doctor: Display appointment information
+deactivate FrontEnd
+
+Doctor -> FrontEnd : Change appointment information and submit
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: PUT /Appointment
+activate BackEnd
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+FrontEnd --> Doctor: Display success
+deactivate FrontEnd
+
+@enduml

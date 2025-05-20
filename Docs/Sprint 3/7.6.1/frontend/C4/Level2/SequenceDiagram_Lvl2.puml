@@ -1,0 +1,29 @@
+@startuml
+title "I want to download my medical history"
+actor Patient
+
+participant "FrontEnd" as spa
+participant "BackEnd" as BackEnd
+
+participant "BackEnd2" as BackEnd
+
+
+Patient->spa: I want to download my medical history
+activate spa
+spa-> BackEnd : HTTP Request: Get /patients/:patientId
+activate BackEnd
+
+spa-> BackEnd : HTTP Request: Get /medicalRecods/:patientId
+
+alt User not Allowed
+    spa<--BackEnd : status 401
+    Patient<-spa: status 401
+else Medical history created successfully
+    spa<--BackEnd : status 200
+    Patient <-spa: status 200
+    deactivate spa
+    deactivate BackEnd
+end
+
+
+@enduml

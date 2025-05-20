@@ -1,0 +1,96 @@
+@startuml
+title "Request to create appointment"
+actor Doctor
+participant "<<View>>\nSPA" as View
+participant "<<Controller>>\nCreateAppointmentComponent" as Controller
+participant "<<Service>>\nOperationRequestService" as ORService
+participant "<<Service>>\nOperationTypeService" as OTService
+participant "<<Service>>\nStaffService" as SService
+participant "<<Service>>\nAppointmentService" as AService
+participant "BackEnd" as BackEnd
+
+Doctor -> View : Request to create appointment
+activate View
+
+View -> Controller: onInit()
+activate Controller
+
+Controller -> ORService: getOperationRequests()
+activate ORService
+
+ORService -> BackEnd: HTTP Request: GET /OperationRequests\nGet all operation requests
+activate BackEnd
+
+BackEnd --> ORService: Return list of operation request DTO
+deactivate BackEnd
+
+ORService --> Controller: Return list of operation request DTO
+deactivate ORService
+
+Controller --> View: Build list of operation request
+deactivate Controller
+
+View --> Doctor: Display list of operation request
+deactivate View
+
+Doctor -> View: Select operation request to transform
+activate View
+
+View -> Controller: buildAppointment(selectedOperationRequest)
+activate Controller
+
+Controller -> OTService: getOperationType(selectedOperationRequest.operationType)
+activate OTService
+
+OTService -> BackEnd: HTTP Request: GET /OperationTypes/id\nGet information about the operation type\nof the selected operation request
+activate BackEnd
+
+BackEnd --> OTService: Return operation type DTO
+deactivate BackEnd
+
+OTService --> Controller: Return operation type DTO
+deactivate OTService
+
+Controller -> SService: getStaff()
+activate SService
+
+SService -> BackEnd: HTTP Request: GET /Staff\nGet staff list
+activate BackEnd
+
+BackEnd --> SService: Return list of staff DTO
+deactivate BackEnd
+
+SService --> Controller: Return list of staff DTO
+deactivate SService
+
+Controller --> View: Build form requiring date, time, room\nand staff based on the operation type
+deactivate Controller
+
+View --> Doctor: Display form requiring date, time, room\nand staff based on the operation type
+deactivate View
+
+Doctor -> View: Input data and submit
+activate View
+
+View -> Controller: createAppointment()
+activate Controller
+
+Controller -> AService: createAppointment()
+activate AService
+
+AService -> BackEnd: HTTP Request: POST /Appointment
+activate BackEnd
+
+BackEnd --> AService: Return success
+deactivate BackEnd
+
+AService --> Controller: Return success
+deactivate AService
+
+Controller --> View: Return success
+deactivate Controller
+
+View --> Doctor: Display success
+deactivate View
+
+@enduml

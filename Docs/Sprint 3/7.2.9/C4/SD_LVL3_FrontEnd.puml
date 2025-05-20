@@ -1,0 +1,147 @@
+@startuml
+title "Request to update appointment"
+actor Doctor
+participant "<<View>>\nSearchAppointment" as SearchView
+participant "<<Controller>>\nSearchAppointmentComponent" as SearchController
+participant "<<View>>\nUpdateAppointment" as UpdateView
+participant "<<Controller>>\nUpdateAppointmentComponent" as UpdateController
+participant "<<Service>>\nStaffService" as SService
+participant "<<Service>>\nSurgeryRoomService" as SRService
+participant "<<Service>>\nAppointmentService" as AService
+participant "<<Service>>\nOperationRequestService" as ORService
+participant "<<Service>>\nOperationTypeService" as OTService
+participant "BackEnd" as BackEnd
+
+Doctor -> SearchView: Request to search appointments
+activate SearchView
+SearchView -> SearchController: onInit()
+activate SearchController
+
+SearchController -> SService: getAllStaff()
+activate SService
+SService -> BackEnd: HTTP Request: GET /Staff\nGet all staff
+activate BackEnd
+BackEnd --> SService: Return list of staff DTO
+deactivate BackEnd
+SService --> SearchController: Return list of staff DTO
+deactivate SService
+
+SearchController -> SRService: getAllSurgeryRooms()
+activate SRService
+SRService -> BackEnd: HTTP Request: GET /SurgeryRooms\nGet all surgery rooms
+activate BackEnd
+BackEnd --> SRService: Return list of room DTO
+deactivate BackEnd
+SRService --> SearchController: Return list of room DTO
+deactivate SRService
+
+SearchController -> AService: getAppointments()
+activate AService
+AService -> BackEnd: HTTP Request: GET /Appointments\nGet all appointments
+activate BackEnd
+BackEnd --> AService: Return list of appointment DTO
+deactivate BackEnd
+AService --> SearchController: Return list of appointment DTO
+deactivate AService
+
+SearchController --> SearchView: Build list of appointments
+deactivate SearchController
+SearchView --> Doctor: Display list of appointments
+deactivate SearchView
+
+
+opt
+Doctor -> SearchView: Change filters
+activate SearchView
+SearchView -> SearchController: getAppointments(patientName, patientMedicalRecordNumber,\nroom, priority, startDate, endDate, staff)
+activate SearchController
+SearchController -> AService: getAppointments(patientName, patientMedicalRecordNumber, room, priority, startDate, endDate, staff)
+activate AService
+AService -> BackEnd: HTTP Request: GET /Appointments\nGet all appointments
+activate BackEnd
+BackEnd --> AService: Return list of appointment DTO
+deactivate BackEnd
+AService --> SearchController: Return list of appointment DTO
+deactivate AService
+SearchController --> SearchView: Build list of appointments
+deactivate SearchController
+SearchView --> Doctor: Display list of appointments
+deactivate SearchView
+end
+
+
+Doctor -> UpdateView: Select appointment to update
+activate UpdateView
+UpdateView -> UpdateController: onInit(appointmentId)
+activate UpdateController
+
+UpdateController -> AService: getAppointment(appointmentId)
+activate AService
+AService -> BackEnd: HTTP Request: GET /Appointments/id\nGet appointment
+activate BackEnd
+BackEnd --> AService: Return appointment dto
+deactivate BackEnd
+AService --> UpdateController: Return appointment dto
+deactivate AService
+
+UpdateController -> ORService: getAppointment(appointment.operationRequestId)
+activate ORService
+ORService -> BackEnd: HTTP Request: GET /OperationRequests/id\nGet operation request
+activate BackEnd
+BackEnd --> ORService: Return operation request dto
+deactivate BackEnd
+ORService --> UpdateController: Return operation request dto
+deactivate ORService
+
+UpdateController -> OTService: getAppointment(operationRequest.operationTypeId)
+activate ORService
+ORService -> BackEnd: HTTP Request: GET /OperationTypes/id\nGet operation type
+activate BackEnd
+BackEnd --> ORService: Return operation type dto
+deactivate BackEnd
+ORService --> UpdateController: Return operation type dto
+deactivate ORService
+
+UpdateController -> SService: getAllStaff()
+activate SService
+SService -> BackEnd: HTTP Request: GET /Staff\nGet all staff
+activate BackEnd
+BackEnd --> SService: Return list of staff DTO
+deactivate BackEnd
+SService --> UpdateController: Return list of staff DTO
+deactivate SService
+
+UpdateController -> SRService: getAllSurgeryRooms()
+activate SRService
+SRService -> BackEnd: HTTP Request: GET /SurgeryRooms\nGet all surgery rooms
+activate BackEnd
+BackEnd --> SRService: Return list of room DTO
+deactivate BackEnd
+SRService --> UpdateController: Return list of room DTO
+deactivate SRService
+
+UpdateController --> UpdateView: Build appointment form
+deactivate UpdateController
+UpdateView --> Doctor: Display appointment form
+deactivate UpdateView
+
+
+Doctor -> UpdateView : Change appointment information and submit
+activate UpdateView
+UpdateView -> UpdateController: updateAppointment()
+activate UpdateController
+UpdateController -> UpdateController: createDto()
+UpdateController -> AService: updateAppointment(appointmentDto)
+activate AService
+AService -> BackEnd: HTTP Request: PUT /Appointments/id\nUpdate appointment
+activate BackEnd
+BackEnd --> AService: Return appointment dto
+deactivate BackEnd
+AService --> UpdateController: Return appointment dto
+deactivate AService
+UpdateController --> UpdateView: Return success
+deactivate UpdateController
+UpdateView --> Doctor: Display success
+deactivate UpdateView
+
+@enduml

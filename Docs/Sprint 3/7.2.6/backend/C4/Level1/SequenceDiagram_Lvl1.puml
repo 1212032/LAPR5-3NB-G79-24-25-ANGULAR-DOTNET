@@ -1,0 +1,17 @@
+@startuml
+title "Update Patient Medical Record"
+
+actor Doctor
+participant "System" as Sys
+
+Doctor -> Sys : Update Patient Medical Record
+activate Sys
+        
+alt User not Allowed
+        Doctor <--Sys : response status 401 
+else 
+        Doctor <--Sys : response status 200
+end
+deactivate Sys
+
+@enduml

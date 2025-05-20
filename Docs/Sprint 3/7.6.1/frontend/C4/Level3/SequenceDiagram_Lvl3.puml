@@ -1,0 +1,45 @@
+@startuml
+title "I want to download my medical history"
+
+participant "SPA" as spa
+participant "DownloadMedicalHistoryComponent" as viewModel
+participant "MedicalRecordService" as mrService
+participant "PatientService" as pService
+participant "PatientDto" as patientDto
+participant "BackEnd" as BackEnd
+
+participant "MedicalRecordDto" as medicalRecorddto
+participant "BackEnd2" as BackEnd2
+
+
+->spa: download medical history
+    activate spa
+    spa->viewModel: download medical history()
+    activate viewModel
+
+viewModel-> pService : getPatient()
+activate pService
+
+        pService-> BackEnd: HTTP Request: GET /patientUsers/id
+        activate BackEnd
+        BackEnd-->pService: patientDto
+        deactivate BackEnd
+        pService->patientDto: create
+        pService-->viewModel: patientDto
+        deactivate pService
+
+viewModel-> mrService : getMedicalRecord()
+activate mrService 
+        mrService-> BackEnd2: HTTP Request: GET /medicalRecords/id
+        activate BackEnd2
+        BackEnd2-->mrService: medicalRecordDto
+        deactivate BackEnd2
+        mrService->medicalRecorddto: create
+        mrService-->viewModel: medicalRecordDto
+        deactivate mrService
+
+    spa<--viewModel:Download success, status 200
+    deactivate mrService
+<--spa:Download success, status 200
+deactivate spa
+@enduml

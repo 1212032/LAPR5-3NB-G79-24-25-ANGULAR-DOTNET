@@ -1,0 +1,86 @@
+@startuml
+title "Request new operation"
+participant "<<View>>\nSPA" as spa
+participant "<<ViewModel>>\nCreateOperationRequestComponent" as viewModel
+participant "<<Controller>>\nOperationRequestService" as service
+participant "<<Model>>\nDto" as dto
+participant "BackEnd" as BackEnd
+
+
+    activate spa 
+    spa->viewModel: onInit()
+    activate viewModel
+
+    viewModel->viewModel: onInit()
+
+    viewModel-> service: requests all operation types
+    activate service
+    service->BackEnd: HTTP Request: GET /operationtypes
+    activate BackEnd
+    ref over BackEnd
+        ./getAllOperationTypes.puml
+    end ref
+    BackEnd-->service: operationtypesDtoList
+    deactivate BackEnd
+
+    service-->dto: create
+
+    service-->viewModel: operationtypesDtoList
+    deactivate BackEnd
+    viewModel-> service: requests all patients
+    service->BackEnd: HTTP Request: GET /patients
+    activate BackEnd
+    ref over BackEnd
+        ./getAllPatients.puml
+    end ref
+    BackEnd-->service: patientsDtoList
+    deactivate BackEnd
+    service-->dto: create
+
+    service-->viewModel: patientsDtoList
+    deactivate service
+
+    viewModel-->spa : render View 
+    deactivate viewModel
+
+<--spa: Displays forms
+deactivate spa
+
+
+->spa: request and operation
+    activate spa
+    spa->viewModel: createOperationRequest()
+    activate viewModel
+    viewModel-> dto: create
+    viewModel-> service : createOperationRequest(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: Post /operationrequests
+
+
+ref over BackEnd
+                AddOperationRequest
+                ./Sprint1/US16/C4/level3/SequenceDiagram_Lvl3.puml
+        end ref
+
+alt Doctor not Allowed
+
+activate BackEnd
+        service<--BackEnd : status 405 
+        spa<--service:status 405
+        <--spa:Displays status 405 message
+
+else    Patient/Doctor not found
+        service<--BackEnd : status 404 
+        spa<--service:status 404
+        <--spa:Displays status 404 message
+else Operation Request successfully
+        
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+    spa<--service:status 200
+    deactivate service
+<--spa:Displays status 405 message
+deactivate spa
+end
+@enduml

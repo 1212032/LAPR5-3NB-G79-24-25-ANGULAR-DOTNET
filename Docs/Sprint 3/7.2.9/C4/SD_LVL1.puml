@@ -1,0 +1,29 @@
+@startuml
+title "Request to update appointment"
+
+actor Doctor
+participant "System" as Sys
+
+Doctor -> Sys : Request to search appointments
+activate Sys
+Sys --> Doctor: Display list of appointments
+deactivate Sys
+
+opt
+Doctor -> Sys: Change filters
+activate Sys
+Sys --> Doctor: Display list of appointments
+deactivate Sys
+end
+
+Doctor -> Sys : Select appointment to update
+activate Sys
+Sys --> Doctor: Display appointment information
+deactivate Sys
+
+Doctor -> Sys : Change appointment information and submit
+activate Sys
+Sys --> Doctor: Display success
+deactivate Sys
+
+@enduml

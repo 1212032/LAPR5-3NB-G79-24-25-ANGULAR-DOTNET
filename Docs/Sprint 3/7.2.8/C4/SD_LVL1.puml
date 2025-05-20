@@ -1,0 +1,25 @@
+@startuml
+title "Request to create appointment"
+
+actor Doctor
+participant "System" as Sys
+
+Doctor -> Sys : Request to create appointment
+activate Sys
+
+Sys --> Doctor: Request to select operation request from list
+deactivate Sys
+
+Doctor -> Sys : Select operation request to transform
+activate Sys
+
+Sys --> Doctor: Request data based on operation type
+deactivate Sys
+
+Doctor -> Sys : Input data and submit
+activate Sys
+
+Sys --> Doctor: Display success
+deactivate Sys
+
+@enduml

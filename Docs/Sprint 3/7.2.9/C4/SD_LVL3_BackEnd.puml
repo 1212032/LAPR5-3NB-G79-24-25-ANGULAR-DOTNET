@@ -1,0 +1,71 @@
+@startuml
+title "Request to update appointment"
+participant "AppointmentController" as Controller
+participant "AppointmentService" as Service
+participant "SurgeryRoomRepo" as SRRepo
+participant "StaffRepo" as SRepo
+participant "AppointmentRepo" as ARepo
+participant "Appointment" as Appointment
+
+--> Controller: HTTP Request:\nGet /Appointments
+Controller -> Service: getAppointments(patientName, patientMedicalRecordNumber,\nroom, priority, startDate, endDate, staff)
+activate Service
+Service -> ARepo: getAppointments(patientName, patientMedicalRecordNumber,\nroom, priority, startDate, endDate, staff)
+activate ARepo
+ARepo --> Service: return appointment list
+deactivate ARepo
+Service --> Controller: return appointment dto list
+deactivate Service
+<-- Controller: return appointment dto list
+
+
+--> Controller: HTTP Request:\nPUT /Appointments
+activate Controller
+
+Controller -> Service: updateAppointment(id,datetime,room,phasesStaff[])
+activate Service
+
+Service -> ARepo: getById(id)
+activate ARepo
+ARepo --> Service: return appointment
+deactivate ARepo
+
+Service -> Service: validate that appointment is still scheduled
+
+Service -> SRRepo: getSurgeryRoom(room)
+activate SRRepo
+SRRepo --> Service: return surgery room
+deactivate SRRepo
+
+Service -> ARepo: getAppointmentsByRoom(datetime,room)
+activate ARepo
+ARepo --> Service: return list of appointment
+deactivate ARepo
+
+Service -> Service: validate that the room is available\nfor the surgery duration
+
+loop for each staff
+    Service -> SRepo: getStaff(staff.id)
+    activate SRepo
+    SRepo --> Service: return staff
+    deactivate SRepo
+
+    Service -> Service: validate that staff is required\nby the operation type phase
+
+    Service -> ARepo: getAppointmentByStaff(datetime,staff)
+    activate ARepo
+    ARepo --> Service: return staff appointment list
+    deactivate ARepo
+
+    Service -> Service: validate that staff is available\nfor the required duration
+end
+
+Service -> Appointment: update(datetime,room,phasesStaff[])
+
+Service --> Controller: return appointment DTO
+deactivate Service
+
+<-- Controller: return appointment DTO
+deactivate Controller
+
+@enduml

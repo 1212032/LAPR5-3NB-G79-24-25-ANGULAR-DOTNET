@@ -1,0 +1,54 @@
+@startuml
+title "Update Patient Medical Record"
+
+participant "SPA" as spa
+participant "UpdateMedicalRecordComponent" as viewModel
+participant "MedicalRecordService" as service
+participant "Dto" as dto
+participant "BackEnd2" as BackEnd
+
+
+->spa: Update Patient Medical Record
+
+    activate spa
+        spa-> viewModel: getMedicalRecordById()
+        activate viewModel
+                viewModel->service: getMedicalRecordById()
+                activate service
+
+                service->BackEnd:   HTTP Request: GET /medicalRecords/:id
+                service-->viewModel:dto
+        deactivate service
+        viewModel-->spa: dto
+        deactivate viewModel
+        
+<--spa: show form to update data
+deactivate spa
+->spa: update data
+activate spa
+    spa->viewModel: updateMedicalRecord(id, dto)
+    
+    viewModel-> service : updateMedicalRecord(id, dto)
+    activate service
+
+service-> BackEnd: HTTP Request: PUT /medicalRecords/:id
+activate BackEnd
+
+
+ref over BackEnd
+                update medical record
+                ../backend/C4/level3/SequenceDiagram_Lvl3.puml
+end ref
+alt User not Allowed
+        service<--BackEnd : status 401
+        spa<--service:status 401
+        <--spa:Displays status 401 message
+else 
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+        spa<--service:status 200
+        deactivate service
+<--spa:Displays status 200 message
+deactivate spa
+end
+@enduml

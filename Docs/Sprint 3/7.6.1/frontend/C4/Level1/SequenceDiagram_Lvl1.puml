@@ -1,0 +1,17 @@
+@startuml
+title "I want to download my medical history"
+
+actor Patient
+participant "System" as Sys
+
+Patient -> Sys : I want to download my medical history
+activate Sys
+        
+alt User not Allowed
+        Patient <--Sys : response status 401 
+else Medical history downloaded successfully
+        Patient <--Sys : response status 200
+end
+deactivate Sys
+
+@enduml
