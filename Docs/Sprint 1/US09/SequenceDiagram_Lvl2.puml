@@ -1,0 +1,41 @@
+@startuml
+title "Edit Existing Patient Profile - Level 2"
+
+actor Admin
+participant "<<System>>" as Sys
+participant "BackEnd" as BackEnd
+participant "EmailService" as EmailService
+
+Admin -> Sys : Search for patient profile
+activate Sys
+Sys -> BackEnd : GetPatientById(patientId)
+activate BackEnd
+
+BackEnd -> BackEnd : Validate patient existence
+alt Patient profile found
+    BackEnd -> Sys : Return patient details
+    Sys -> Admin : Display patient details
+    Admin -> Sys : Edit patient details
+    activate Sys
+
+    Sys -> BackEnd : UpdatePatient(dto)
+    activate BackEnd
+
+    BackEnd -> BackEnd : Check email and phone uniqueness
+    alt Email and Phone are Unique
+        BackEnd -> BackEnd : Update patient in database
+        BackEnd -> EmailService : Send notification
+        <--Sys : Response status 200 (Updated)
+    else Email already exists
+        <--Sys : Response status 400 (Bad Request)
+    else Phone number already exists
+        <--Sys : Response status 400 (Bad Request)
+    end
+else Patient profile not found
+    <--Sys : Response status 404 (Not Found)
+end
+
+deactivate BackEnd
+deactivate Sys
+@enduml
+

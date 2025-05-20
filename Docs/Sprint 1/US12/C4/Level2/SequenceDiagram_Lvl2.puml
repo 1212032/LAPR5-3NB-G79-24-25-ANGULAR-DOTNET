@@ -1,0 +1,20 @@
+@startuml
+title "Request to Create Staff"
+participant "<<System>>\nBackEnd" as BackEnd
+
+
+
+
+-> BackEnd : Request to Create staff
+activate BackEnd
+BackEnd -> BackEnd : Add(DTO)
+
+
+alt Invalid Data
+         <-- BackEnd : status 400
+else Operation Request successeful
+         <--BackEnd : status 200
+end
+deactivate BackEnd
+
+@enduml

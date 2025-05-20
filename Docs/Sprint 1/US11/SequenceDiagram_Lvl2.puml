@@ -1,0 +1,29 @@
+@startuml
+title "Search Patient Profiles - Level 2"
+
+actor Admin
+participant "BackEnd" as BackEnd
+participant "Database" as DB
+
+Admin -> BackEnd : Search patient profiles (name, email, DOB, medical record number)
+activate BackEnd
+
+BackEnd -> DB : Query profiles based on search criteria
+activate DB
+
+alt Profiles found
+    DB -> BackEnd : Return list of matching profiles
+    BackEnd -> Admin : Display search results (list of patient info)
+else No profiles found
+    DB -> BackEnd : Response status 404 (Not Found)
+    BackEnd -> Admin : Response status 404 (Not Found)
+end
+
+Admin -> BackEnd : Select profile to view/edit/delete
+activate BackEnd
+BackEnd -> DB : Retrieve patient profile details
+DB -> BackEnd : Return patient profile details
+BackEnd -> Admin : Display patient profile details
+deactivate BackEnd
+
+@enduml

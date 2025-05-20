@@ -1,0 +1,28 @@
+@startuml
+title "Edit Existing Patient Profile"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : Search for patient profile
+activate Sys
+
+alt Patient profile found
+    Sys -> Admin : Display patient details
+    Admin -> Sys : Edit patient details
+    activate Sys
+
+    alt Valid Input
+        Sys -> Sys : Validate uniqueness of email and phone number
+        Sys -> Sys : Log changes
+        Sys -> Sys : Send notification to patient
+        Admin <-- Sys : Response status 200 (Updated)
+    else Invalid Input
+        Admin <-- Sys : Response status 400 (Bad Request)
+    end
+deactivate Sys
+
+else Patient profile not found
+    Admin <-- Sys : Response status 404 (Not Found)
+end
+@enduml

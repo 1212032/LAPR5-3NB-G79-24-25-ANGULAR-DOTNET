@@ -1,0 +1,35 @@
+@startuml
+
+title "Reset my password if I forget it"
+actor Backoffice_User as User
+participant "Front-End Form" as FE
+participant "Back-End Service" as BE
+participant "Microsoft Entra ID" as Entra
+participant "Email Service" as Email
+
+== Request Password Reset ==
+User -> FE: Request password reset
+FE -> BE: Send user email to request reset
+BE -> Entra: Validate user email
+Entra -> BE: Email validated, generate reset token
+BE -> Email: Send password reset link to user email
+Email -> User: Send password reset link (with expiration)
+
+== User Clicks Reset Link ==
+User -> Email: Open reset link
+User -> FE: Access reset form
+FE -> BE: Validate reset token
+BE -> Entra: Verify token validity
+Entra -> BE: Token valid
+BE -> FE: Proceed to password reset form
+
+== User Submits New Password ==
+User -> FE: Submit new password
+FE -> BE: Send new password
+BE -> Entra: Validate password complexity
+Entra -> BE: Password valid, update in directory
+BE -> FE: Password updated successfully
+FE -> User: Password reset success
+
+@enduml
+

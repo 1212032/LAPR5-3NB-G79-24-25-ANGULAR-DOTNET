@@ -1,0 +1,43 @@
+@startuml
+title "Delete Patient Profile - Level 3"
+
+participant "PatientController" as Controller
+participant "PatientService" as Service
+participant "PatientRepository" as PatientRepo
+database "Database" as DB
+participant "SystemChangeLogService" as ChangeLogService
+
+-> Controller : Search for patient profile
+activate Controller
+
+Controller -> Service : FindPatientAsync(PatientId)
+activate Service
+
+Service -> PatientRepo : GetById(PatientId)
+activate PatientRepo
+PatientRepo -> DB : GetById(PatientId)
+PatientRepo --> Service : Patient record
+deactivate PatientRepo
+
+alt Patient found
+    Service -> Service : Confirm deletion
+    Service -> PatientRepo : DeleteAsync(PatientId)
+
+    activate PatientRepo
+    PatientRepo -> DB : Delete Patient record
+    PatientRepo --> Service : Response status 200 (Deleted)
+    deactivate PatientRepo
+
+    Service -> ChangeLogService : LogDeletion(PatientId)
+    ChangeLogService -> DB : Insert log entry
+    ChangeLogService --> Service : Response status 200 (Logged)
+
+    <-- Controller : Response status 200 (Deleted)
+else Patient not found
+    <-- Controller : Response status 404 (Not Found)
+end
+
+deactivate Service
+deactivate Controller
+
+@enduml

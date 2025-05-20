@@ -1,0 +1,55 @@
+@startuml
+title "Edit Existing Patient Profile - Level 3"
+
+participant "PatientController" as Controller
+participant "PatientService" as Service
+participant "PatientRepository" as PatientRepo
+participant "Patient" as Patient
+database "Database" as db
+participant "EmailService" as EmailService
+
+-> Controller : Search for patient profile
+activate Controller
+Controller -> Service : GetPatientById(patientId)
+activate Service
+
+Service -> PatientRepo : FindPatient(patientId)
+activate PatientRepo
+PatientRepo -> db : Query patient data
+PatientRepo --> Service : Return patient data
+deactivate PatientRepo
+
+alt Patient profile found
+    <--Controller : Return patient details
+    Controller -> Service : EditPatient(dto)
+    activate Service
+
+    Service -> Service : ValidateInput(dto)
+    alt Valid Input
+        Service -> PatientRepo : CheckEmailAndPhoneUniqueness(dto.Email, dto.Phone)
+        activate PatientRepo
+        PatientRepo --> Service : Email and Phone unique
+        deactivate PatientRepo
+
+        Service -> PatientRepo : UpdatePatient(patientId, dto)
+        activate PatientRepo
+        PatientRepo -> db : Update patient data
+        PatientRepo --> Service : Confirmation
+        deactivate PatientRepo
+
+        Service -> EmailService : SendNotification(dto.Email)
+        EmailService -> EmailService : Format email content
+        EmailService -> EmailService : Send email to registered email
+
+        <--Controller : Response status 200 (Updated)
+    else Invalid Input
+        <--Controller : Response status 400 (Bad Request)
+    end
+
+else Patient profile not found
+    <--Controller : Response status 404 (Not Found)
+end
+deactivate Service
+deactivate Controller
+
+@enduml

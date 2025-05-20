@@ -1,0 +1,52 @@
+@startuml
+title "Create New Patient Profile - Level 3"
+
+participant "PatientController" as Controller
+participant "PatientService" as Service
+participant "PatientRepository" as PatientRepo
+participant "Patient" as Patient
+database "Database" as db
+participant "EmailService" as EmailService
+
+-> Controller : Input patient details (first name, last name, DOB, contact info, medical history)
+activate Controller
+
+Controller -> Service : AddAsync(dto)
+activate Service
+
+Service -> Service : ValidateInput(dto)
+alt Valid Input
+    Service -> PatientRepo : AddAsync(Patient)
+    activate PatientRepo
+        PatientRepo -> db : Insert Patient
+        PatientRepo --> Service : Return Patient with ID
+    deactivate PatientRepo
+
+    Service -> Service : AddPrefix()
+    Service -> PatientRepo : CheckEmailUniqueness(dto.Email)
+    Service -> PatientRepo : CheckPhoneUniqueness(dto.Phone)
+
+    alt Email and Phone are Unique
+        Service -> db : CommitChanges()
+        Service -> EmailService : SendConfirmationEmail(dto.Email)
+        EmailService -> EmailService : Format email content
+        EmailService -> EmailService : Send email to registered email
+
+        <-- Service : Response status 201 (Created)
+    else Email already exists
+        <-- Service : Response status 400 (Bad Request)
+    else Phone number already exists
+        <-- Service : Response status 400 (Bad Request)
+    end
+
+else Invalid Input
+    Service -> Service : LogValidationErrors()
+    <-- Service : Response status 400 (Bad Request)
+end
+
+deactivate Service
+deactivate Controller
+
+@enduml
+
+

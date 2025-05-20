@@ -1,0 +1,23 @@
+@startuml
+title "Reset my password if I forget it"
+
+participant "BackEnd" as BackEnd
+
+== Request Password Reset ==
+-> BackEnd: Request password reset
+-> BackEnd: Send user email to request reset
+<--BackEnd: Send password reset link (with expiration)
+
+== User Clicks Reset Link ==
+-> BackEnd: Access reset form
+-> BackEnd: Validate reset token
+<-- BackEnd: Proceed to password reset form
+
+== User Submits New Password ==
+-> BackEnd: Submit new password
+-> BackEnd: Send new password
+<-- BackEnd: Password updated successfully
+<-- BackEnd: Password reset successfully
+
+@enduml
+

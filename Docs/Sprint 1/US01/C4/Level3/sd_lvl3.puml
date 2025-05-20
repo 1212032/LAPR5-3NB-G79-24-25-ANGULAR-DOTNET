@@ -1,0 +1,31 @@
+@startuml
+title "Register new backoffice users"
+actor Admin as A
+actor User as U
+
+A -> MEntraID : Login with Microsoft Entra ID
+MEntraID -> A : Admin authenticated
+
+A -> BackofficeController : Register new user (doctor, nurse, technician)
+BackofficeController -> BackofficeService : Register new user request
+BackofficeService -> MEntraID : Create new account (name, email, role)
+MEntraID -> BackofficeService : Account created
+BackofficeService -> MEntraID : Assign role (doctor, nurse, etc.)
+MEntraID -> BackofficeService : Role assigned
+
+BackofficeService -> MEntraID : Generate one-time setup link
+MEntraID -> BackofficeService : Link generated
+BackofficeService -> BackofficeController : Return setup link
+BackofficeController -> User : Send setup link via email
+
+User -> MEntraID : Access link to set password
+MEntraID -> User : Enforce strong password policy
+User -> MEntraID : Set password and activate account
+
+MEntraID -> BackofficeService : User account activated
+BackofficeService -> BackofficeController : Notify admin of successful registration
+BackofficeController -> Admin : Notify admin
+
+BackofficeController -> User : Send confirmation email
+@enduml
+

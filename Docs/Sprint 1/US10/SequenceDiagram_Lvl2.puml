@@ -1,0 +1,23 @@
+@startuml
+title "Delete Patient Profile"
+
+actor Admin
+participant "BackEnd" as BackEnd
+database "Database" as DB
+
+-> BackEnd : Search for patient profile
+activate BackEnd
+
+alt Patient found
+    BackEnd -> BackEnd : Confirm deletion
+    activate BackEnd
+
+    BackEnd -> DB : Delete Patient record
+    BackEnd --> Admin : Response status 200 (Deleted)
+
+else Patient not found
+    <-- BackEnd : Response status 404 (Not Found)
+end
+
+deactivate BackEnd
+@enduml

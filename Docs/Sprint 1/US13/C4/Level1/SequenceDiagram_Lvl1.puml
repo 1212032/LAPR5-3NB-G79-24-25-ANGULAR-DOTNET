@@ -1,0 +1,20 @@
+@startuml
+title "Request to update staff"
+
+actor Admin
+participant "System" as Sys
+
+Admin -> Sys : Request to update staff
+activate Sys
+
+alt Can't update an inactive staff
+        <--Sys : response status 400 
+else Staff not found
+        <--Sys : response status 404
+else Staff updated successfully
+        <--Sys : response status 200
+deactivate Sys
+end
+
+
+@enduml

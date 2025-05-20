@@ -1,0 +1,27 @@
+@startuml
+title "Create New Patient Profile - Level 1"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : Input patient details (first name, last name, DOB, contact info, medical history)
+activate Sys
+
+alt Valid Input
+    Sys -> Sys : Generate unique patient ID (Medical Record Number)
+    Sys -> Sys : Validate email and phone number uniqueness
+    Sys -> Sys : Store patient profile securely
+    Admin <-- Sys : Response status 201 (Created)
+deactivate Sys
+
+else Invalid Input
+    Admin <-- Sys : Response status 400 (Bad Request)
+    deactivate Sys
+end
+
+alt Email already exists
+    Admin <-- Sys : Response status 400 (Bad Request)
+    deactivate Sys
+end
+
+@enduml

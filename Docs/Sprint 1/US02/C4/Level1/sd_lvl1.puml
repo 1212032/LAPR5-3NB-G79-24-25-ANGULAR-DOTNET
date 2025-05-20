@@ -1,0 +1,16 @@
+@startuml
+title "Reset my password if I forget it"
+actor Backoffice_User as User
+participant "System" as FE
+
+== Request Password Reset ==
+User -> FE: Request password reset
+
+== User Clicks Reset Link ==
+User -> FE: Access reset form
+
+== User Submits New Password ==
+User -> FE: Submit new password
+FE -> User: Password reset success
+
+@enduml

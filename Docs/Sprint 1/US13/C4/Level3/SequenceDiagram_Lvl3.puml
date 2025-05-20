@@ -1,0 +1,46 @@
+@startuml
+title "Request to update staff"
+participant "StaffController" as Controller
+participant "StaffService" as Service
+participant "StaffRepository" as Repository
+participant "Staff" as Staff
+database "Database" as database
+
+-> Controller : Request to update staff
+activate Controller
+Controller -> Service : Update(DTO)
+activate Service
+Service -> Repository : GetById(id)
+activate Repository
+Repository -> database : GetById(id)
+Repository -> Service : Return staff
+deactivate Repository
+alt Staff not found
+        Service-> Controller: response status 404
+        <--Controller : response status 404
+end
+
+Service -> Staff : Update staff details
+
+alt Can't update an inactive staff
+        Service-> Controller: response status 400
+        <--Controller : response status 400
+end
+
+Service -> Repository : Update(staff)
+activate Repository
+Repository -> database: save(staff)
+Repository -> Service : Return success
+deactivate Repository
+Service -> Controller: Return staff DTO
+deactivate Service
+
+alt Staff updated successfully
+        Service -> Controller : response status 200
+        <--Controller : response status 200
+end
+deactivate Controller
+
+
+
+@enduml

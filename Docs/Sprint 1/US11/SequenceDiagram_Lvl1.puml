@@ -1,0 +1,26 @@
+@startuml
+title "Search and Manage Patient Profiles - Level 1"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : Search patient profiles (name, email, DOB, medical record number)
+activate Sys
+
+alt Profiles found
+    Sys -> Admin : Display search results (list of patient info)
+else No profiles found
+    Sys -> Admin : Response status 404 (Not Found)
+end
+
+Admin -> Sys : Select patient profile to view, edit, or delete
+activate Sys
+
+alt View/Edit/Delete profile
+    Sys -> Admin : Show profile details or update confirmation
+else Profile deletion confirmed
+    Sys -> Admin : Response status 200 (Deleted)
+end
+
+deactivate Sys
+@enduml

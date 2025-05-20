@@ -1,0 +1,31 @@
+@startuml
+title "Create New Patient Profile - Level 2"
+
+actor Admin
+participant "BackEnd" as BackEnd
+participant "Database" as DB
+participant "Email Service" as EmailService
+
+Admin -> BackEnd : Input patient details (first name, last name, DOB, contact info, medical history)
+activate BackEnd
+
+BackEnd -> BackEnd : Validate input data
+
+alt Valid Input
+    BackEnd -> DB : Generate unique patient ID (Medical Record Number)
+    BackEnd -> DB : Check for existing email and phone number
+
+    alt Email and phone are unique
+        BackEnd -> DB : Store patient profile
+        BackEnd -> EmailService : Send confirmation email
+        BackEnd <-- Admin : Response status 201 (Created)
+    else Email already exists
+        BackEnd <-- Admin : Response status 400 (Bad Request)
+    else Phone number already exists
+        BackEnd <-- Admin : Response status 400 (Bad Request)
+    end
+else Invalid Input
+    BackEnd <-- Admin : Response status 400 (Bad Request)
+end
+deactivate BackEnd
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+title "Request to update staff"
+
+participant "BackEnd" as BackEnd
+
+
+
+-> BackEnd : Request to update staff
+activate BackEnd
+BackEnd -> BackEnd : Update(DTO)
+
+alt Can't update an inactive staff
+        <--BackEnd : response status 400 
+else Staff not found
+        <--BackEnd : response status 404
+else Staff updated successfully
+        <--BackEnd : response status 200
+deactivate BackEnd
+
+end
+
+@enduml
