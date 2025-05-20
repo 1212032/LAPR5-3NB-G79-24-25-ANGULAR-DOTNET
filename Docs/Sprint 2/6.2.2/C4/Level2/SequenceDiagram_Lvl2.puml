@@ -1,0 +1,31 @@
+@startuml
+title "Request to update patient profile"
+actor Patient
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Patient -> FrontEnd : Request to update profile
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: GET /PatientUser\nRequest patient data
+activate BackEnd
+
+BackEnd --> FrontEnd: Return patient data
+deactivate BackEnd
+
+FrontEnd --> Patient: Display current data
+deactivate FrontEnd
+
+Patient -> FrontEnd : Change data and submit
+activate FrontEnd
+
+FrontEnd -> BackEnd: HTTP Request: PUT /PatientUser\nSend data to update
+activate BackEnd
+
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+
+FrontEnd --> Patient: Display success
+deactivate FrontEnd
+
+@enduml

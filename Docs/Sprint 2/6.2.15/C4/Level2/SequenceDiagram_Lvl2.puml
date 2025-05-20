@@ -1,0 +1,48 @@
+@startuml
+title "Update an operation requesition"
+actor Doctor
+participant "FrontEnd" as spa
+participant "BackEnd" as BackEnd
+
+
+
+Doctor->spa: onInit()
+    activate spa
+    
+    spa->BackEnd: HTTP Request: GET /operationtypes
+    activate BackEnd
+    BackEnd-->spa: operationtypesDto array
+    deactivate BackEnd
+    
+    spa->BackEnd: HTTP Request: GET /patients
+    activate BackEnd
+    BackEnd-->spa: patientsDto array
+    deactivate BackEnd
+
+    spa->BackEnd: HTTP Request: GET /OperationRequests/id
+    activate BackEnd
+    BackEnd-->spa: operationRequestDto
+    deactivate BackEnd
+
+Doctor<--spa: Display forms
+deactivate spa
+
+Doctor-> spa : Request to update an operation requesition
+activate spa
+spa-> BackEnd : HTTP Request: PUT /operationrequests
+activate BackEnd
+BackEnd -> BackEnd : Update(DTO)
+
+alt Doctor not Allowed
+        spa<--BackEnd : status 405 
+        Doctor<--spa: Show error message with status 405 
+else Operation Request successfully
+        spa<--BackEnd : status 200
+        deactivate BackEnd
+        Doctor<--spa: Show error message with status 200 
+        deactivate spa
+deactivate BackEnd
+
+end
+
+@enduml

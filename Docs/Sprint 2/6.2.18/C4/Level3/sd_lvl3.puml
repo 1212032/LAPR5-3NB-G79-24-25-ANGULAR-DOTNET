@@ -1,0 +1,53 @@
+@startuml
+title "Create new operation type"
+participant "<<View>>\nSPA" as spa
+participant "<<Controller>>\nCreateOperationTypeComponent" as viewModel
+participant "<<Service>>\nOperationTypeService" as service
+participant "Dto" as dto
+participant "BackEnd" as BackEnd
+
+
+->spa: onInit()
+    activate spa
+    spa->viewModel: onInit()
+    activate viewModel
+    viewModel-->spa : render View 
+    deactivate viewModel
+
+<--spa: Displays forms
+deactivate spa
+
+
+->spa: Create an operation type (name, phases)
+    activate spa
+    spa->viewModel: createOperationType()
+    activate viewModel
+    viewModel-> dto: new
+    viewModel-> service : createOperationType(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: POST /operationtypes
+
+
+ref over BackEnd
+                Add new types of operations
+                .\Sprint 1\US20\C4\Level3\sd_lvl3.puml
+        end ref
+
+alt Operation type name already exists
+
+activate BackEnd
+        service<--BackEnd : status 400 
+        spa<--service:status 400
+        <--spa:Displays invalid name message
+else Operation Type created successfully
+        
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+    spa<--service:status 200
+    deactivate service
+<--spa:Displays success message
+deactivate spa
+end
+
+@enduml

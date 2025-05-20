@@ -1,0 +1,22 @@
+@startuml
+title "List operation types"
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+->FrontEnd: onInit()
+    activate FrontEnd
+
+<--FrontEnd: Display form
+    deactivate FrontEnd
+
+->FrontEnd: Request to list operation types
+activate FrontEnd
+FrontEnd-> BackEnd: HTTP Request: GET /operationtypes
+activate BackEnd
+
+BackEnd-->FrontEnd: Return list of operation types
+deactivate BackEnd
+
+<--FrontEnd: Display list of operation types
+
+@enduml

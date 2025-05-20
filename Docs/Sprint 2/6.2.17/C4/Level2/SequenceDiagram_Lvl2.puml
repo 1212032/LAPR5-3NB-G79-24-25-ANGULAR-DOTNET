@@ -1,0 +1,25 @@
+@startuml
+title "Search/List operation requests"
+actor Doctor
+participant "FrontEnd" as spa
+participant "BackEnd" as BackEnd
+
+
+
+Doctor-> spa : Request to update an operation requesition
+activate spa
+spa-> BackEnd : HTTP Request: PUT /operationrequests
+activate BackEnd
+
+alt Doctor not Allowed
+        spa<--BackEnd : status 405
+        Doctor<--spa:status 405
+else Operation Request successfully
+        spa<--BackEnd : status 200
+        deactivate BackEnd
+
+Doctor<--spa:status 200
+deactivate spa
+end
+
+@enduml

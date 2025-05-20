@@ -1,0 +1,13 @@
+@startuml "SD"
+Title "Add new types of operations"
+actor Admin
+participant "System" as Controller
+
+Admin -> Controller: Request to add operation (name, phases)
+alt Name is Unique
+    Controller -> Admin: Operation type added successfully
+else Name is Not Unique
+    Controller -> Admin: Error: Duplicate operation type name
+end
+
+@enduml

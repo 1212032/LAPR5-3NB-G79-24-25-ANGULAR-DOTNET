@@ -1,0 +1,17 @@
+@startuml
+title "Get All Operation Types"
+
+participant "OperationTypeService" as service
+participant "OperationTypeRepository" as repo
+database "Database" as db
+
+->service: HTTP Request: GET /operationtypes
+activate service
+    service->repo: getAll()
+        activate repo
+        repo-> db: getAll()
+    repo-->service:operationTypeDtoList
+    deactivate repo
+<--service:operationTypeDtoList
+deactivate service
+@enduml

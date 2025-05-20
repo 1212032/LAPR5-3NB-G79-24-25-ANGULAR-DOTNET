@@ -1,0 +1,44 @@
+@startuml
+title "List operation types"
+participant "<<View>>\nSPA" as spa
+participant "<<Controller>>\nSearchOperationTypeComponent" as viewModel
+participant "<<Service>>\nOperationTypeService" as service
+participant "Dto" as dto
+participant "BackEnd" as BackEnd
+
+
+->spa: onInit()
+    activate spa
+    spa->viewModel: onInit()
+    activate viewModel
+    viewModel-->spa : render View 
+    deactivate viewModel
+
+<--spa: Displays forms
+deactivate spa
+
+->spa: Request to list operation types
+activate spa
+
+spa->viewModel: getOperationTypes()
+activate viewModel
+
+viewModel->service: getOperationTypes()
+activate service
+
+service->BackEnd: HTTP Request: GET /operationtypes
+activate BackEnd
+
+BackEnd-->service: return list of operation type DTO
+deactivate BackEnd
+
+service->viewModel: return list of operation type DTO
+deactivate service
+
+viewModel->spa: fill table with operation types
+deactivate viewModel
+
+<--spa: display table of operation types
+deactivate spa
+
+@enduml

@@ -1,0 +1,9 @@
+@startuml "SD"
+Title "Edit existing operation types"
+actor Admin
+participant "System" as Controller
+
+Admin -> Controller: Request to update operation (id, name, phases)
+Controller -> Admin: Operation type updated successfully
+
+@enduml

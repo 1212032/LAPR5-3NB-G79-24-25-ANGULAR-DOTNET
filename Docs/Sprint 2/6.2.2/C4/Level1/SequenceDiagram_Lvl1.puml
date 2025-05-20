@@ -1,0 +1,19 @@
+@startuml
+title "Request to update patient profile"
+
+actor Patient
+participant "System" as Sys
+
+Patient -> Sys : Request to update profile
+activate Sys
+
+Sys --> Patient: Display current data
+deactivate Sys
+
+Patient -> Sys : Change data and submit
+activate Sys
+
+Sys --> Patient: Display success
+deactivate Sys
+
+@enduml

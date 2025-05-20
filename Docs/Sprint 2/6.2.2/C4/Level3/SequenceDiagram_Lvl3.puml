@@ -1,0 +1,59 @@
+@startuml
+title "Request to update patient profile"
+actor Patient
+participant "View" as View
+participant "Controller" as Controller
+participant "Service" as Service
+participant "BackEnd" as BackEnd
+
+Patient -> View : Request to update profile
+activate View
+
+View->Controller: onInit()
+activate Controller
+
+Controller->Service: getPatient() 
+activate Service
+
+Service->BackEnd: HTTP Request: GET /PatientUser
+activate BackEnd
+
+BackEnd-->Service: patient DTO
+deactivate BackEnd
+
+Service-->Controller: patient DTO
+deactivate Service
+
+Controller-->View: fill form
+deactivate Controller
+
+View-->Patient: Display data
+deactivate View
+
+
+
+Patient -> View : Submit
+activate View
+
+View->Controller: updatePatient()
+activate Controller
+
+Controller->Service: updatePatient(dto) 
+activate Service
+
+Service->BackEnd: HTTP Request: PUT /PatientUser
+activate BackEnd
+
+BackEnd-->Service: patient DTO
+deactivate BackEnd
+
+Service-->Controller: patient DTO
+deactivate Service
+
+Controller-->View: Return success
+deactivate Controller
+
+View-->Patient: Display success
+deactivate View
+
+@enduml

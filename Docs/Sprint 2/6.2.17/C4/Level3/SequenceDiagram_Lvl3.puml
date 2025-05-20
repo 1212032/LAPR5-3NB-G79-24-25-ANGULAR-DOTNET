@@ -1,0 +1,82 @@
+@startuml
+title "Search/List operation requests"
+actor Doctor
+participant "View" as spa
+participant "SearchOperationRequestComponent" as viewmodel
+participant "OperationRequestService" as spaService
+participant "Dto" as dto
+participant "BackEnd" as BackEnd
+
+Doctor->spa: onInit()
+activate spa
+    spa-> spaService: request all operation requests
+    activate spaService
+    spaService-> BackEnd: HTTP Request: GET /operationrequests
+    activate BackEnd
+        ref over BackEnd
+            getAllOperationRequests
+        end ref
+    BackEnd--> spaService: operationRequestListDto
+    deactivate BackEnd
+    spaService-->spa : operationRequestListDto
+    deactivate spaService
+
+    spa-> spaService: requests all operation types
+    activate spaService
+    spaService->BackEnd: HTTP Request: GET /operationtypes
+    activate BackEnd
+    ref over BackEnd
+    ./getAllOperationTypes.puml
+    end ref
+    BackEnd-->spaService: operationtypesDtoList
+    deactivate BackEnd
+
+    spaService-->spa: operationtypesDtoList
+    deactivate spaService
+
+    spa-> spaService: requests all patients
+    activate spaService
+        spaService->BackEnd: HTTP Request: GET /patients
+        activate BackEnd
+        ref over BackEnd
+        ./getAllPatients.puml
+        end ref
+        BackEnd-->spaService: patientsDtoList
+        deactivate BackEnd
+
+        deactivate BackEnd
+        spaService-->spa: patientsDtoList
+    deactivate spaService
+
+Doctor<--spa: Displays forms
+deactivate spa
+
+Doctor->spa: Request to update an operation requesition
+activate spa
+
+spa-> spaService : Request an operation
+activate spaService
+spaService -> dto : create
+spaService-> BackEnd: HTTP Request: PUT /operationrequests
+activate BackEnd
+ref over BackEnd
+RemoveOperationRequest
+./Sprint1/US19/C4/level3/SequenceDiagram_Lvl3.puml
+end ref
+alt Doctor not Allowed
+    spaService<--BackEnd : status 405
+    spa<--spaService:status 405
+    Doctor<--spa:Displays status 405 message
+else Operation Rquest not found
+    spaService<--BackEnd : status 404
+    spa<--spaService:status 404
+    Doctor<--spa:Displays status 404 message
+else Operation Request successfully
+    spaService<--BackEnd : status 200
+    deactivate BackEnd
+    spa<--spaService:status 200
+    deactivate spaService
+    Doctor<--spa:Displays status 405 message
+    deactivate spa
+end
+@enduml

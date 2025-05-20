@@ -1,0 +1,97 @@
+@startuml
+title "Update an operation requesition"
+actor Doctor
+participant "View" as spa
+participant "UpdateOperationRequestComponent" as controller
+participant "OperationRequestService" as service
+participant "Dto" as dto
+participant "BackEnd" as BackEnd
+
+
+Doctor->spa: onInit()
+    activate spa
+    spa->controller: onInit()
+    activate controller
+
+    controller->service: getAllOperationTypes() 
+    activate service
+    service->BackEnd: HTTP Request: GET /operationtypes
+    activate BackEnd
+    ref over BackEnd
+        ./getAllOperationTypes.puml
+    end ref
+    BackEnd-->service: operationtypesDtoList
+    deactivate BackEnd
+    
+    service-->controller: operationtypesDtoList
+    deactivate service
+
+    controller->service:  getAllPatients() 
+    activate service
+
+    service -> BackEnd: HTTP Request: GET /patients
+    activate BackEnd
+    ref over BackEnd
+        ./getAllPatients.puml
+    end ref
+    BackEnd->service: patientsDtoList
+    deactivate BackEnd
+
+    service-->controller: patientsDtoList
+    deactivate service
+
+    controller -> service: getOperationRequestById(id)
+    activate service
+        service -> BackEnd: HTTP Request: GET /OperationRequests/id
+    activate BackEnd
+    ref over BackEnd
+        ./getOperationRequestById.puml
+    end ref
+    BackEnd->service: operationRequestDto
+    deactivate BackEnd
+
+    service-->controller: operationRequestDto
+    deactivate service
+
+    controller-->spa : render View
+    deactivate controller
+
+Doctor<--spa: Displays forms
+deactivate spa
+
+Doctor->spa: Request to update an operation requesition
+    activate spa
+
+    spa-> controller : Request an operation
+    activate controller
+
+controller -> dto : create
+controller-> service:Update(OperationRequestDto)
+activate service
+alt Doctor not Allowed
+        controller<--service : status 405 
+        spa<--controller:status 405
+        Doctor<--spa:Displays status 405 message
+else Operation Rquest not found
+        controller<--service : status 404 
+        spa<--controller:status 404
+        Doctor<--spa:Displays status 404 message
+else Operation Request successfully
+        
+        service -> BackEnd :  HTTP Request: PUT /operationrequests
+        activate BackEnd
+        ref over BackEnd
+            AddOperationRequest
+            ./Sprint1/US17/C4/level3/SequenceDiagram_Lvl3.puml
+        end ref
+        BackEnd-->service: status 200
+        deactivate BackEnd
+        controller<--service : status 200 
+        deactivate service
+    spa<--controller:status 200
+    deactivate controller
+Doctor<--spa:Displays status 200 message
+deactivate spa
+end
+
+@enduml

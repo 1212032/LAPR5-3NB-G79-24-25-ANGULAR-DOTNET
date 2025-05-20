@@ -1,0 +1,44 @@
+@startuml
+title "Inactivate operation type"
+participant "<<View>>\nSPA" as spa
+participant "<<Controller>>\nSearchOperationTypeComponent" as viewModel
+participant "<<Service>>\nOperationTypeService" as service
+participant "BackEnd" as BackEnd
+
+
+->spa: onInit()
+    activate spa
+    spa->viewModel: onInit()
+    activate viewModel
+    viewModel-->spa : render View 
+    deactivate viewModel
+
+<--spa: Displays forms
+deactivate spa
+
+
+->spa: Request to inactivate operation type
+activate spa
+
+spa->viewModel: inactivateOperationType(id)
+activate viewModel
+
+viewModel->service: inactivateOperationType(id)
+activate service
+
+service->BackEnd: HTTP Request: DELETE /operationtypes/id
+activate BackEnd
+
+BackEnd-->service: return success
+deactivate BackEnd
+
+service->viewModel: return success
+deactivate service
+
+viewModel->spa: return success
+deactivate viewModel
+
+<--spa: display success
+deactivate spa
+
+@enduml

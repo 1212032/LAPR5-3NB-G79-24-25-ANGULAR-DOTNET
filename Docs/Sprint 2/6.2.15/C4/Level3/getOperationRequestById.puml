@@ -1,0 +1,19 @@
+@startuml
+title "Get OperationRequest by id"
+
+participant "OperationRequestService" as service
+participant "OperationRequestRepository" as repo
+database "Database" as db
+
+->service:HTTP Request: GET /OperationRequest/id
+activate service
+    service->repo: getOperationRequestById(id)
+        activate repo
+        repo-> db: getOperationRequestById(id)
+    repo-->service:operationRequestDto
+    deactivate repo
+
+<--service:operationRequestDto
+deactivate service
+
+@enduml

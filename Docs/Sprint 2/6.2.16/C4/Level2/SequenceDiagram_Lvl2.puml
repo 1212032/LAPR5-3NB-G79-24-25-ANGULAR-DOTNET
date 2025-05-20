@@ -1,0 +1,22 @@
+@startuml
+title "Remove an operation request"
+actor Doctor
+participant "FrontEnd" as spa
+participant "BackEnd" as BackEnd
+
+Doctor -> spa : Request to remove an operation requesition
+activate spa
+spa-> BackEnd : HTTP Request: DELETE /operationrequests/id
+activate BackEnd
+
+alt Doctor not Allowed
+        spa<--BackEnd : status 405 
+        Doctor<--spa: Show error message with status 405 
+else Operation Request successfully
+        spa<--BackEnd : status 200
+        deactivate spa
+
+Doctor<--spa: Show success message with status 200 
+deactivate BackEnd
+end
+@enduml

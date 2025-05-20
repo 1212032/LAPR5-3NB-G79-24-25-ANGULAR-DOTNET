@@ -1,0 +1,78 @@
+@startuml
+title "Remove an operation requesition"
+actor Doctor
+participant "View" as spa
+participant "UpdateOperationRequestComponent" as viewmodel
+participant "OperationRequestService" as spaService
+participant "Dto" as dto
+participant "BackEnd" as BackEnd
+
+Doctor->spa: onInit()
+    activate spa
+    spa -> viewmodel: onInit()
+    activate viewmodel
+    viewmodel-> spaService: requests all operation types
+    activate spaService
+    spaService->BackEnd: HTTP Request: GET /operationtypes
+    activate BackEnd
+    ref over BackEnd
+        ./getAllOperationTypes.puml
+    end ref
+    BackEnd-->spaService: operationtypesDtoList
+    deactivate BackEnd
+
+    spaService-->viewmodel: operationtypesDtoList
+    deactivate BackEnd
+    viewmodel-> spaService: requests all patients
+    spaService->BackEnd: HTTP Request: GET /patients
+    activate BackEnd
+    ref over BackEnd
+        ./getAllPatients.puml
+    end ref
+    BackEnd-->spaService: patientsDtoList
+    deactivate BackEnd
+
+    deactivate BackEnd
+    spaService-->viewmodel: patientsDtoList
+    deactivate spaService
+    viewmodel-->spa: render view
+    deactivate viewmodel
+
+Doctor<--spa: Displays forms
+deactivate spa
+
+Doctor->spa: request and operation
+    activate spa
+    spa->viewmodel: removeOperationRequest()
+    activate viewmodel
+        
+        viewmodel-> spaService : removeOperationRequest()
+        activate spaService
+        spaService -> dto : create
+        
+        spaService-> BackEnd: HTTP Request: Post /operationrequests
+
+activate BackEnd
+        ref over BackEnd
+                RemoveOperationRequest
+                ./Sprint1/US18/C4/level3/SequenceDiagram_Lvl3.puml
+        end ref
+alt Doctor not Allowed
+        spaService<--BackEnd : status 405 
+        viewmodel<--spaService:status 405
+        Doctor<--spa:Displays status 405 message
+
+else    Patient/Doctor not found
+        spaService<--BackEnd : status 404 
+        viewmodel<--spaService:status 404
+        Doctor<--spa:Displays status 404 message
+else Operation Request successfully
+        spaService<--BackEnd : status 200 
+        deactivate BackEnd
+    viewmodel<--spaService:status 200
+    deactivate spaService
+    spa<--viewmodel: status 200
+Doctor<--spa:Displays success message
+deactivate spa
+end
+@enduml

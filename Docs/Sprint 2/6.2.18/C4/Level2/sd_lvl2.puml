@@ -1,0 +1,29 @@
+@startuml
+title "Create new operation type"
+participant "FrontEnd" as spa
+participant "BackEnd" as BackEnd
+
+->spa: onInit()
+    activate spa
+
+<--spa: Display form
+    deactivate spa
+
+->spa: Create an operation type (name, phases)
+activate spa
+spa-> BackEnd : HTTP Request: POST /operationtypes
+activate BackEnd
+
+alt Operation type name already exists
+         spa<--BackEnd : status 400
+         <-spa: status 400 
+else Operation Type created successfully
+         spa<--BackEnd : status 200
+         <-spa: status 200 
+deactivate spa
+deactivate BackEnd
+end
+
+deactivate BackEnd
+
+@enduml
