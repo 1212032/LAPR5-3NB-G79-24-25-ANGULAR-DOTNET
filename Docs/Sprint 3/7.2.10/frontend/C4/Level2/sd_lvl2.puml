@@ -1,0 +1,16 @@
+@startuml
+title "Request to create new Surgery Room"
+participant "<<System>>\nBackEnd" as BackEnd
+
+-> BackEnd : Request to create Surgery Room
+activate BackEnd
+BackEnd -> BackEnd : Add(DTO)
+
+alt Invalid Data
+         <-- BackEnd : status 400
+else Operation Request successeful
+         <--BackEnd : status 200
+end
+deactivate BackEnd
+
+@enduml

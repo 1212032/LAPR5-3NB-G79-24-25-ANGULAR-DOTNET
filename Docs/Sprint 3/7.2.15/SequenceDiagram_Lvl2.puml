@@ -1,0 +1,42 @@
+@startuml
+title "List/Search Specializations - Level 2"
+
+actor Admin
+participant "SPA (Frontend)" as SPA
+participant "<<System>>" as Sys
+participant "SpecializationModel" as Model
+
+Admin -> SPA : Search specializations (Code, Name, Description)
+activate SPA
+SPA -> Sys : GET /api/specializations?query=params
+activate Sys
+Sys -> Model : Fetch specializations matching query
+Model --> Sys : Return list of matching specializations
+Sys --> SPA : Response status 200 (List of specializations)
+Admin <-- SPA : Display results in paginated list with actions (View, Edit, Delete)
+deactivate SPA
+
+Admin -> SPA : Select action (e.g., View, Edit, Delete)
+alt View Details
+    SPA -> Sys : GET /api/specializations/{id}
+    Sys -> Model : Retrieve specialization details by ID
+    Model --> Sys : Return specialization details
+    Sys --> SPA : Response status 200 (Specialization details)
+    Admin <-- SPA : Display specialization details
+else Edit
+    Admin -> SPA : Redirect to Edit Specialization (US 7.2.13)
+else Delete
+    Admin -> SPA : Confirm deletion
+    SPA -> Sys : DELETE /api/specializations/{id}
+    alt Can Delete
+        Sys -> Model : Remove specialization
+        Model --> Sys : Deletion successful
+        Sys --> SPA : Response status 200 (Specialization deleted)
+        Admin <-- SPA : Display success message
+    else Cannot Delete
+        Sys --> SPA : Response status 400 (Cannot delete due to dependencies)
+        Admin <-- SPA : Display error message
+    end
+end
+deactivate Sys
+@enduml

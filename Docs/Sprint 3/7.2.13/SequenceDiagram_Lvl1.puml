@@ -1,0 +1,27 @@
+@startuml
+title "Edit Specialization - Level 1"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : Search for specialization to edit (Code, Name)
+activate Sys
+
+alt Specialization Found
+    Sys -> Sys : Retrieve specialization details
+    Admin <-- Sys : Display specialization details for editing
+    Admin -> Sys : Submit updated specialization details
+    alt Valid Updates
+        Sys -> Sys : Validate updates
+        Sys -> Sys : Update specialization details in the system
+        Admin <-- Sys : Response status 200 (Specialization updated successfully)
+    else Invalid Updates
+        Admin <-- Sys : Response status 400 (Validation errors)
+    end
+
+else Specialization Not Found
+    Admin <-- Sys : Response status 404 (Specialization not found)
+end
+
+deactivate Sys
+@enduml

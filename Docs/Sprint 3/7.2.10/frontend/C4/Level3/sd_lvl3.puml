@@ -1,0 +1,42 @@
+@startuml
+title "Create new Surgery Room"
+participant "<<View>>\nSPA" as spa
+participant "<<Controller>>\nCreateSurgeryRoomComponent" as viewModel
+participant "<<Service>>\nSurgeryRoomService" as service
+participant "Dto" as dto
+participant "BackEnd" as BackEnd
+
+
+->spa: onInit()
+    activate spa
+    spa->viewModel: onInit()
+    activate viewModel
+    viewModel-->spa : render View 
+    deactivate viewModel
+
+<--spa: Displays forms
+deactivate spa
+
+
+->spa: Create surgery room\n(code, name, description, forSurgery)
+    activate spa
+    spa->viewModel: createSurgeryRoom()
+    activate viewModel
+    viewModel-> dto: new
+    viewModel-> service : createSurgeryRoom(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: POST /SurgeryRoom
+activate BackEnd
+BackEnd --> service: surgeryRoomDto
+deactivate BackEnd
+
+service-->viewModel: surgeryRoomDto
+deactivate service
+
+viewModel-->spa: return success
+deactivate viewModel
+
+<--spa: display success
+
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+title "Request to create new Surgery Room"
+participant "SurgeryRoomController" as Controller
+participant "SurgeryRoomService" as Service
+participant "SurgeryRoomRepository" as Repository
+participant "SurgeryRoom" as SurgeryRoom
+database "Database" as database
+
+<-- Controller : Request to insert new Surgery Room
+activate Controller
+Controller -> Service : Add(DTO)
+activate Service
+
+Service -> SurgeryRoom : create()
+alt Invalid Data
+        Service --> Controller : status 400
+        <-- Controller : status 400
+end
+
+Service -> Repository : Add(surgeryRoom)
+activate Repository
+        Repository->database : Add(surgeryRoom)
+Repository -> Service : Return success
+deactivate Repository
+
+
+
+alt Surgery Room updated successfully
+        Service --> Controller : status 200
+        deactivate Service
+
+        <--Controller : status 200
+end
+deactivate Controller
+
+@enduml

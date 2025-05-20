@@ -1,0 +1,19 @@
+@startuml
+title "Request to create new Surgery Room"
+
+actor Admin
+participant "<<System>>" as Sys
+
+
+Admin -> Sys : Request to create Surgery Room
+activate Sys
+        
+alt Invalid Data
+        Admin <-- Sys : status 400
+else Staff Created successeful
+        Admin <--Sys : status 200
+end
+deactivate Sys
+
+@enduml
+

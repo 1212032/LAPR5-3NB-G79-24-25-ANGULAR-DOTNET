@@ -1,0 +1,48 @@
+@startuml
+title "Edit Existing Specialization - Level 3"
+
+actor Admin
+participant "SPA (Frontend)" as SPA
+participant "<<System>>" as Sys
+participant "SpecializationModel" as Model
+participant "Database" as DB
+
+Admin -> SPA : Search for specialization by ID
+activate SPA
+SPA -> Sys : GET /api/specializations/{id}
+activate Sys
+Sys -> Model : Build query object for specialization
+Model -> DB : Query specialization in database
+DB --> Model : Return specialization entity
+Model --> Sys : Convert entity to DTO
+Sys --> SPA : Response 200 (Specialization details)
+Admin <-- SPA : Display specialization details
+deactivate SPA
+
+Admin -> SPA : Submit updated specialization details
+activate SPA
+SPA -> Sys : PUT /api/specializations/{id}
+activate Sys
+
+Sys -> Model : Validate updated fields (e.g., Code, Name, Description)
+alt Validation Successful
+    Sys -> Model : Check uniqueness of Code
+    alt Code is Unique
+        Model -> DB : Update specialization in database
+        DB --> Model : Update successful
+        Model --> Sys : Convert entity to updated DTO
+        Sys --> SPA : Response 200 (Specialization updated)
+        Admin <-- SPA : Display success message
+    else Code is Not Unique
+        Model --> Sys : Return error (Code already exists)
+        Sys --> SPA : Response 400 (Validation error)
+        Admin <-- SPA : Display error message
+    end
+else Validation Failed
+    Model --> Sys : Return validation errors
+    Sys --> SPA : Response 400 (Validation errors)
+    Admin <-- SPA : Display error messages
+end
+deactivate Sys
+deactivate SPA
+@enduml

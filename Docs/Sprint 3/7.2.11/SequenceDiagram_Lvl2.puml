@@ -1,0 +1,33 @@
+@startuml
+title "Create New Specialization - Level 2"
+
+actor Admin
+participant "SPA (Frontend)" as SPA
+participant "<<System>>" as Sys
+participant "Database" as DB
+
+Admin -> SPA : Input specialization details (Code, Designation, Description)
+activate SPA
+SPA -> Sys : POST /api/specializations
+activate Sys
+
+alt Valid Input
+    Sys -> DB : Validate Code uniqueness
+    DB --> Sys : Code is unique
+    Sys -> DB : Insert specialization details
+    DB --> Sys : Specialization created
+    Sys --> SPA : Response status 201 (Created)
+    Admin <-- SPA : Display success message
+else Invalid Input
+    alt Code already exists
+        Sys --> SPA : Response status 400 (Code already exists)
+        Admin <-- SPA : Display error message
+    else Other validation errors
+        Sys --> SPA : Response status 400 (Invalid input)
+        Admin <-- SPA : Display error message
+    end
+end
+
+deactivate Sys
+deactivate SPA
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+title "Create New Specialization - Level 1"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : Input specialization details (Code, Designation, Description)
+activate Sys
+
+alt Valid Input
+    Sys -> Sys : Validate Code uniqueness
+    Sys -> Sys : Store specialization details
+    Admin <-- Sys : Response status 201 (Created)
+
+else Invalid Input
+    alt Code already exists
+        Admin <-- Sys : Response status 400 (Code already exists)
+    else Other validation errors
+        Admin <-- Sys : Response status 400 (Invalid input)
+    end
+end
+
+deactivate Sys
+@enduml

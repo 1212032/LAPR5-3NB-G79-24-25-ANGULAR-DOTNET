@@ -1,0 +1,35 @@
+@startuml
+title "List/Search Specializations - Level 1"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : Search specializations (Code, Name, Description)
+activate Sys
+
+alt Matching Results Found
+    Sys -> Sys : Retrieve list of matching specializations
+    Admin <-- Sys : Display results in paginated list with actions (View, Edit, Delete)
+    
+    Admin -> Sys : Select action (e.g., View Details)
+    alt View Details
+        Sys -> Sys : Retrieve specialization details
+        Admin <-- Sys : Display full specialization details
+    else Edit
+        Admin -> Sys : Redirect to Edit Specialization (US 7.2.13)
+    else Delete
+        Admin -> Sys : Confirm deletion
+        alt Can Delete
+            Sys -> Sys : Remove specialization from the system
+            Admin <-- Sys : Response status 200 (Specialization deleted)
+        else Cannot Delete
+            Admin <-- Sys : Response status 400 (Cannot delete due to dependencies)
+        end
+    end
+
+else No Matching Results
+    Admin <-- Sys : Display message "No specializations found"
+end
+
+deactivate Sys
+@enduml
