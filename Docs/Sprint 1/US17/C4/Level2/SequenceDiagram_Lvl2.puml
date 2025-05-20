@@ -1,0 +1,19 @@
+@startuml
+title "Update an operation requesition"
+participant "BackEnd" as BackEnd
+
+
+
+-> BackEnd : Request to update an operation requesition
+activate BackEnd
+BackEnd -> BackEnd : Update(DTO)
+
+alt Doctor not Allowed
+        <--BackEnd : response status 405 
+else Operation Request successfully
+        <--BackEnd : response status 200
+deactivate BackEnd
+
+end
+
+@enduml

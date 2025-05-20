@@ -1,0 +1,10 @@
+@startuml "SD"
+Title "Edit existing operation types"
+
+participant "BackEnd" as BackEnd
+-> BackEnd: Request to update operation (id, name, phases)
+BackEnd -> BackEnd:  Update(id, name, phases)
+<-- BackEnd: Success response
+<-- BackEnd: Operation type updated successfully
+
+@enduml

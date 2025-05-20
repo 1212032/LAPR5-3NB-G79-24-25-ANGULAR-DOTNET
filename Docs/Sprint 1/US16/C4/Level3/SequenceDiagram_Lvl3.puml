@@ -1,0 +1,59 @@
+@startuml
+title "Request new operation"
+
+participant "OperationRequestController" as Controller
+participant "OperationRequestService" as Service
+participant "OperationRequestRepository" as OperationRepo
+participant "StaffRepository" as StaffRepo
+participant "OperationTypeRepository" as OperationTypeRepo
+participant "PatientRepository" as PatientRepo
+participant "OperationRequest" as op
+database "Database" as database
+
+-> Controller : Request an operation
+activate Controller
+Controller -> Service : Add(DTO)
+activate Service
+alt Doctor not Allowed
+        Service --> Controller : error 405 
+         <--Controller : error 405 
+end         
+        Service -> StaffRepo: getById(StaffId)
+        activate StaffRepo
+        StaffRepo -> database: getById(StaffId)
+        StaffRepo --> Service : Staff
+        deactivate StaffRepo
+
+        Service -> OperationTypeRepo: getById(OperationTypeId)
+        activate OperationTypeRepo
+        OperationTypeRepo -> database: getById(OperationTypeId)
+        OperationTypeRepo --> Service: OperationType
+        deactivate OperationTypeRepo
+
+        Service -> PatientRepo : getById(PatientId)
+        activate PatientRepo
+        PatientRepo -> database: getById(PatientId)
+        PatientRepo--> Service : Patient
+        deactivate PatientRepo
+
+
+alt Patient/Doctor not found
+        Service --> Controller : error 404
+         <-- Controller : error 404
+else Operation Request successfully
+         Service -> OperationRepo : Add(Operation)
+        activate OperationRepo
+        OperationRepo->database : Add(Operation)
+        OperationRepo -> Service : dto
+        deactivate OperationRepo
+        Service -> op : toDto()
+        activate op
+        op->op : createDto()
+        op--> Service : dto
+        deactivate op
+        Service -> Controller: dto
+        deactivate Service
+        <--Controller : status 200
+        deactivate Controller
+end
+@enduml

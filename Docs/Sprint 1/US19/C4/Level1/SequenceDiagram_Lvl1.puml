@@ -1,0 +1,30 @@
+@startuml
+title "List Operation requests"
+
+actor Doctor
+participant "<<System>>" as Sys
+
+Doctor -> Sys : List Operation requests with/out filters
+activate Sys
+        
+alt Doctor not allowed
+        Doctor <--Sys : response status 405 
+else Operation Rquest not found
+        Doctor <--Sys : response status 404 
+else Operation Request successfully
+        Doctor <--Sys : response status 200
+deactivate Sys
+end
+
+Doctor -> Sys : Edit/delete Operation requests
+activate Sys
+        
+alt Operation Rquest not found
+        Doctor <--Sys : response status 404 
+else Operation Request successfully
+        Doctor <--Sys : response status 200
+deactivate Sys
+end
+
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml SequenceDiagram_Lvl1
+title "List staff"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : List staff with/without filters
+activate Sys
+Sys --> Admin : Return filtered list of staff
+deactivate Sys
+
+@enduml

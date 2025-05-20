@@ -1,0 +1,55 @@
+@startuml
+title "Remove an operation requisition"
+
+
+participant "OperationRequestController" as Controller
+participant "OperationRequestService" as Service
+participant "OperationRequestRepository" as OperationRepo
+participant "OperationRequest" as op
+database "Database" as db
+
+
+-> Controller : Request to remove an operation requisition
+activate Controller
+Controller -> Service : Delete(DTO)
+activate Service
+alt Doctor not Allowed
+    Controller<--Service : response status 405      
+    <--Controller : response status 405      
+end
+    Service -> OperationRepo: GetByIdAsync(OperationRequestId)
+    activate OperationRepo
+    OperationRepo --> Service : OperationRequest
+    deactivate OperationRepo
+
+alt Is Scheduled
+    Service -> op: isScheduled()
+    activate op
+    op --> Service: true
+    deactivate op
+    Service -->Controller: response status 400
+    <--Controller: response status 400
+else 
+    op --> Service: false
+end
+    Service -> OperationRepo : Remove(Operation)
+    activate OperationRepo
+    OperationRepo -> db : remove(Operation)
+    OperationRepo -> Service : Return success
+    deactivate OperationRepo
+    Service -> op : toDto()
+    activate op
+    op->op : createDto()
+    op--> Service : dto
+    deactivate op
+alt Operation Request successfully removed
+    Service -> Controller: dto
+    deactivate Service
+        <--Controller : response status 200
+deactivate Controller
+end
+
+
+
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+title "Deactivate Staff"
+
+participant "StaffController" as Controller
+participant "StaffService" as Service
+participant "StaffRepository" as Repository
+participant "Staff" as Staff
+database "Database" as database
+
+-> Controller : Request to deactivate staff
+activate Controller
+Controller -> Service : Inactivate(DTO)
+activate Service
+Service -> Repository : GetById(id)
+activate Repository
+    	Repository -> database : GetById(id)
+Repository -> Service : Return staff
+deactivate Repository
+
+alt Staff not found
+        Service --> Controller : response status 404
+        <--Controller : response status 404 
+end
+Service -> Staff : Inactivate()
+Service -> Repository : Inactivate(staff)
+activate Repository
+        Repository->database: save(staff)
+Repository -> Service : Return success
+deactivate Repository
+alt Staff deactivated successfully
+        Service --> Controller: dto
+        <--Controller : response status 200
+deactivate Controller
+end
+
+
+
+
+
+@enduml

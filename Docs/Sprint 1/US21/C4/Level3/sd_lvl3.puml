@@ -1,0 +1,20 @@
+@startuml "SD"
+Title "Edit existing operation types"
+participant "OperationTypeController" as Controller
+participant "OperationTypeService" as Service
+participant "OperationType" as OperationType
+participant "OperationTypeRepository" as Repository
+
+-> Controller: Request to update operation (id, name, phases)
+Controller -> Service: Update(id, name, phases)
+Service -> Repository: GetById(id)
+Repository --> Service: operationType
+Service -> OperationType: inactivate()
+Service -> OperationType: new()
+OperationType --> Service: operationType
+Service -> Repository: Save new operation type
+Repository --> Service: Operation type saved
+Service --> Controller: Success response
+<-- Controller: Operation type updated successfully
+
+@enduml

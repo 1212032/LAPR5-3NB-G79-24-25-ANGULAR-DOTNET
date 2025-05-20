@@ -1,0 +1,68 @@
+@startuml
+title "Update an operation requesition"
+participant "OperationRequestController" as Controller
+participant "OperationRequestService" as Service
+participant "OperationRequestRepository" as OperationRepo
+participant "StaffRepository" as StaffRepo
+participant "OperationTypeRepository" as OperationTypeRepo
+participant "PatientRepository" as PatientRepo
+participant "OperationRequest" as op
+database "Database" as db
+
+-> Controller : Request to update an operation requesition
+activate Controller
+Controller -> Service : Update(DTO)
+activate Service
+alt Doctor not Allowed
+        Service-->Controller : error 405 
+        <--Controller : erro 405 
+end
+        Service -> OperationRepo: getById(OperationRequestId)
+        activate OperationRepo
+        OperationRepo -> db : getById(OperationRequestId)
+        OperationRepo --> Service: OperationRequest
+        deactivate OperationRepo
+alt Operation Rquest not found
+        Controller<--Service :response status 404 
+        <--Controller : response status 404 
+end
+        Service -> StaffRepo: getById(StaffId)
+        activate StaffRepo
+        StaffRepo -> db: getById(StaffId)
+        StaffRepo --> Service : Staff
+        deactivate StaffRepo
+
+        Service -> OperationTypeRepo: getById(OperationTypeId)
+        activate OperationTypeRepo
+        OperationTypeRepo -> db : getById(OperationTypeId)
+        OperationTypeRepo --> Service: OperationType
+        deactivate OperationTypeRepo
+
+        Service -> PatientRepo : getById(PatientId)
+        activate PatientRepo
+        PatientRepo -> db : getById(PatientId)
+        PatientRepo--> Service : Patient
+        deactivate PatientRepo
+
+        Service -> Service: Update Operation Request details
+
+        Service -> OperationRepo : Update(OperationRequest)
+        activate OperationRepo
+        OperationRepo -> db : commit update
+   
+        OperationRepo -> Service : success
+        deactivate OperationRepo
+        
+Service -> op : toDto()
+activate op
+op->op : createDto()
+op--> Service : dto
+deactivate op
+Service -> Controller: dto
+deactivate Service
+alt Operation Request successfully
+        <--Controller : status 200
+deactivate Controller
+end
+
+@enduml

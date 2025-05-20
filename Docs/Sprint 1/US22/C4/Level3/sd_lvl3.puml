@@ -1,0 +1,16 @@
+@startuml "SD"
+Title "Remove obsolete or no longer performed operation types"
+participant "OperationTypeController" as Controller
+participant "OperationTypeService" as Service
+participant "OperationType" as OperationType
+participant "OperationTypeRepository" as Repository
+
+--> Controller: Request to inactivate operation type (id)
+Controller -> Service: Inactivate(id)
+Service -> Repository: GetById(id)
+Repository --> Service: operationType
+Service -> OperationType: inactivate()
+Service --> Controller: Success response
+<-- Controller: Operation type inactivated successfully
+
+@enduml

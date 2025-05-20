@@ -1,0 +1,21 @@
+@startuml
+title "Remove an operation requisition"
+
+actor Doctor
+participant "System" as Sys
+
+
+
+Doctor -> Sys : Request to remove an operation requisition
+
+        Sys --> Doctor: you want to remove this operation requisition?
+        Doctor -> Sys: yes remove
+activate Sys
+alt Doctor not Allowed
+        Doctor <--Sys : response status 405 
+else Operation Request successfully removed
+        Doctor <--Sys : response status 200
+deactivate Sys
+end
+
+@enduml

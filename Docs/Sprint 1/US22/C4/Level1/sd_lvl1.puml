@@ -1,0 +1,10 @@
+@startuml "SD"
+Title "I want to remove obsolete or no longer performed operation types"
+
+actor Admin
+participant "System" as Controller
+
+Admin -> Controller: Request to inactivate operation type (id)
+Controller --> Admin: Operation type inactivated successfully
+
+@enduml

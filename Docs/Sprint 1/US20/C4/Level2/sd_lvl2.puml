@@ -1,0 +1,13 @@
+@startuml "SD"
+Title "Add new types of operations"
+participant "BackEnd" as BackEnd
+
+-> BackEnd: Request to add operation (name, phases)
+BackEnd -> BackEnd: Create(name, phases)
+alt Name is Unique    
+     <--BackEnd: Success response    
+else Name is Not Unique
+     <--BackEnd: Name already exists error  
+end
+
+@enduml

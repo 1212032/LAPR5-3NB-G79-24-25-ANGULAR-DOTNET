@@ -1,0 +1,12 @@
+@startuml SequenceDiagram_Lvl2
+title "List operation types"
+participant "BackEnd" as BackEnd
+
+
+-> BackEnd : Fetch list of operation types with requested filters
+activate BackEnd
+
+<--BackEnd : returned filtered list of operation types
+deactivate BackEnd
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+title "Request new operation"
+participant "<<System>>\nBackEnd" as BackEnd
+
+
+
+
+-> BackEnd : Request an operation
+activate BackEnd
+BackEnd -> BackEnd : Add(DTO)
+
+alt Doctor not Allowed
+         <--BackEnd : error 405 
+else Patient/Doctor not found
+         <-- BackEnd : error 404
+else Operation Request successfully
+         <--BackEnd : status 200
+end
+deactivate BackEnd
+
+@enduml

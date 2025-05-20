@@ -1,0 +1,10 @@
+@startuml "SD"
+Title "Remove obsolete or no longer performed operation types"
+
+participant "BackEnd" as BackEnd
+-> BackEnd: Request to inactivate operation type (id)
+-> BackEnd: Inactivate(id)
+<-- BackEnd: Success response
+<-- BackEnd: Operation type inactivated successfully
+
+@enduml

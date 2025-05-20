@@ -1,0 +1,17 @@
+@startuml
+title "Deactivate Staff"
+
+actor Admin
+participant "System" as Sys
+
+Admin -> Sys : Request to deactivate staff
+        
+activate Sys
+alt Staff not found
+        Admin <--Sys : response status 404 
+else Staff deactivated successfully
+        Admin <--Sys : response status 200
+deactivate Sys
+end
+
+@enduml

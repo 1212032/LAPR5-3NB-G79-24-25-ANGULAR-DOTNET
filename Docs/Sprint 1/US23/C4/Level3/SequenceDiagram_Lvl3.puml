@@ -1,0 +1,25 @@
+@startuml SequenceDiagram_Lvl3
+title "List operation types"
+participant "OperationTypeController" as Controller
+participant "OperationTypeService" as Service
+participant "OperationTypeRepository" as Repo
+database "Database" as db
+
+-> Controller : List operation types with filters
+activate Controller
+Controller -> Service: GetAllAsyncWithFilters()
+activate Service
+Service->Repo : GetAllAsyncWithFilters()
+activate Repo
+Repo -> db: GetAllWithFilters()
+activate db
+db --> Repo : return list of operation types
+deactivate db
+Repo --> Service : return list of operation types
+deactivate Repo
+Service --> Controller : return list of operation types dto
+deactivate Service
+<-- Controller : return list of operation types dto
+deactivate Controller
+
+@enduml

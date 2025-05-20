@@ -1,0 +1,23 @@
+@startuml "SD"
+Title "Add new types of operations"
+participant "OperationTypeController" as Controller
+participant "OperationTypeService" as Service
+participant "OperationType" as OperationType
+participant "OperationTypeRepository" as Repository
+
+-> Controller: Request to add operation (name, phases)
+Controller -> Service: Create(name, phases)
+Service -> OperationType: new()
+OperationType --> Service: operationType
+Service -> Repository: Save new operation type
+alt Name is Unique
+    Repository --> Service: Operation type saved
+    Service --> Controller: Success response
+    <-- Controller: Operation type added successfully
+else Name is Not Unique
+    Repository --> Service: Operation type not saved
+    Service -> Controller: Name already exists error
+    <-- Controller: Error: Duplicate operation type name
+end
+
+@enduml

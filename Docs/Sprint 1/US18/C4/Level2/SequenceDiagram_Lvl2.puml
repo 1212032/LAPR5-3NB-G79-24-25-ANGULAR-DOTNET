@@ -1,0 +1,18 @@
+@startuml
+title "Remove an operation requisition"
+
+participant "BackEnd" as BackEnd
+
+
+-> BackEnd : Request to remove an operation requisition
+activate BackEnd
+BackEnd -> BackEnd : Delete(DTO)
+
+alt Doctor not Allowed
+        <--BackEnd : response status 405 
+else Operation Request successfully removed
+        <--BackEnd : response status 200
+deactivate BackEnd
+end
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+title "Deactivate Staff"
+
+participant "BackEnd" as BackEnd
+
+-> BackEnd : Request to deactivate staff
+activate BackEnd
+BackEnd -> BackEnd : Inactivate(DTO)
+
+alt Staff not found
+        <--BackEnd : response status 404 
+else Staff deactivated successfully
+        <--BackEnd : response status 200
+deactivate BackEnd
+end
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml SequenceDiagram_Lvl1
+title "List operation types"
+
+actor Admin
+participant "<<System>>" as Sys
+
+Admin -> Sys : List operation types with/without filters
+activate Sys
+Sys --> Admin : Return filtered list of operation types
+deactivate Sys
+
+@enduml

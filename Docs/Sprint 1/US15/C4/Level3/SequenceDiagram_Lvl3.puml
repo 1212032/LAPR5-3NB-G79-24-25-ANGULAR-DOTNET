@@ -1,0 +1,25 @@
+@startuml SequenceDiagram_Lvl3
+title "List staff"
+participant "StaffController" as Controller
+participant "StaffService" as Service
+participant "StaffRepository" as Repo
+database "Database" as db
+
+-> Controller : List staff with filters
+activate Controller
+Controller -> Service: GetAllAsyncWithFilters()
+activate Service
+Service->Repo : GetAllAsyncWithFilters()
+activate Repo
+Repo -> db: GetAllWithFilters()
+activate db
+db --> Repo : return list of staff
+deactivate db
+Repo --> Service : return list of staff
+deactivate Repo
+Service --> Controller : return list of staff dto
+deactivate Service
+<-- Controller : return list of staff dto
+deactivate Controller
+
+@enduml

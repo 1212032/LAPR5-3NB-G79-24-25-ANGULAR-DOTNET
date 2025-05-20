@@ -1,0 +1,12 @@
+@startuml SequenceDiagram_Lvl2
+title "List staff"
+participant "BackEnd" as BackEnd
+
+
+-> BackEnd : Fetch list of staff with requested filters
+activate BackEnd
+
+<--BackEnd : returned filtered list of staff
+deactivate BackEnd
+
+@enduml

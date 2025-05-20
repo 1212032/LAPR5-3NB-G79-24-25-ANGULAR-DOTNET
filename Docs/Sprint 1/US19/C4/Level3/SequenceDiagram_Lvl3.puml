@@ -1,0 +1,67 @@
+@startuml
+title "Request new operation"
+participant "OperationRequestController" as Controller
+participant "OperationRequestService" as Service
+participant "OperationRequestRepository" as OperationRepo
+participant "OperationRequest" as OperationRequest
+database "Database" as db
+
+
+
+-> Controller : List Operation requests with/out filters
+activate Controller
+Controller -> Service: DeleteAsync(OperationRequestId)
+activate Service
+    Service->OperationRepo : GetById(OperationRequestId)
+    activate OperationRepo
+    OperationRepo -> db: GetById(OperationRequestId)
+    OperationRepo --> Service : OperationRequest
+    deactivate OperationRepo
+
+alt Operation Rquest not found
+        Controller<--Service :response status 404 
+         <--Controller : response status 404 
+
+end
+
+alt Doctor not allowed
+         Controller<--Service : response status 405 
+         <--Controller: response status 405 
+else Operation Request successfully
+        alt GET /api/OperationRequests/
+            Service-> OperationRepo: GetAll()
+            activate OperationRepo
+            OperationRepo -> db: GetAll()
+            OperationRepo -->Service: list Operation Requests
+            deactivate OperationRepo
+
+             Controller<--Service : list dto
+            <--Controller : response status 200
+
+        else GET api/OperationRequests/filter?
+            Service-> OperationRepo: GetAllWithFilters()
+            activate OperationRepo
+            OperationRepo -> db: GetAllWithFilters()
+            OperationRepo -->Service: list Operation Requests
+            deactivate OperationRepo
+
+            Controller<--Service : list dto
+            deactivate Service
+            <--Controller : response status 200
+deactivate Controller
+end
+
+-> Controller : Edit/delete Operation requests
+activate Controller
+
+ref over Controller: Edit Operation Request: /docs/US17/C4/Level3/SequenceDiagram_Lvl3.puml \n Delete Operation Request: /docs/US18/C4/Level3/SequenceDiagram_Lvl3.puml
+    
+
+alt Operation Rquest not found
+         <--Controller : response status 404 
+else Operation Request successfully
+         <--Controller : response status 200
+deactivate Controller
+end
+
+@enduml
