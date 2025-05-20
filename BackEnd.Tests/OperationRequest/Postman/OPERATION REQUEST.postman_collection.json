@@ -1,0 +1,882 @@
+{
+	"info": {
+		"_postman_id": "8fe557c3-f1d5-4d3a-ad83-de7945644b8b",
+		"name": "OPERATION REQUEST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39008652"
+	},
+	"item": [
+		{
+			"name": "GET TOKEN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"token\", data.access_token);\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "8cb4473b-fbec-4737-ac14-973ccc04d086",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "Ab68Q~1eO-14pX1Bp4tubzUFNBo.qA9jhNZ.tc09",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "api://8cb4473b-fbec-4737-ac14-973ccc04d086/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/f8da0c59-22a8-4891-bc76-7a603e362eac/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"f8da0c59-22a8-4891-bc76-7a603e362eac",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Operation Request INVALID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    pm.test(\"Status code is 404\", function () {\r",
+							"        pm.response.to.have.status(404);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/OperationRequests/9999",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationRequests",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Doctor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"doctorid\", data.id);\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"licensenumber\", datetime);\r",
+							"    pm.collectionVariables.set(\"email\", \"email\"+datetime+\"@mail.com\");\r",
+							"    pm.collectionVariables.set(\"phone\", \"phone\"+datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"LicenseNumber\": \"{{licensenumber}}\",\r\n    \"Email\": \"{{email}}\",\r\n    \"Phone\": \"{{phone}}\",\r\n    \"FirstName\": \"nome1\",\r\n    \"LastName\": \"apelido1\",\r\n    \"Role\": \"Doctor\",\r\n    \"specialization\":\"1\",\r\n    \"AvailabilitySlots\": [\r\n        {\r\n            \"Item1\":\"2024-10-19T08:00:00\",\r\n            \"Item2\":\"2024-10-19T18:00:00\"\r\n        },\r\n        {\r\n            \"Item1\":\"2024-10-20T08:00:00\",\r\n            \"Item2\":\"2024-10-20T18:00:00\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Staff",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Staff"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Specialization1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"id\", data.id);\r",
+							"    pm.test(\"Status code is 201\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"name\", \"specialization \"+ datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"specialization1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Specializations",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Specializations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Specialization2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"id\", data.id);\r",
+							"    pm.test(\"Status code is 201\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"name\", \"specialization \"+ datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"specialization2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Specializations",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Specializations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"patientid\", data.id);\r",
+							"    pm.test(\"Status code is 201\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"medicalRecord\", \"medicalRecord\"+ datetime);\r",
+							"    pm.collectionVariables.set(\"email\", \"email\"+datetime+\"@mail.com\");\r",
+							"    pm.collectionVariables.set(\"phone\", \"phone\"+datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"FirstName\":\"Gustavo\",\r\n\t\"LastName\":\"Maria\",\r\n\t\"FullName\":\"Gustavo Maria\",\r\n\t\"EmergencyContact\":\"228340501\",\t\r\n\t\"Gender\":\"Man\",\t\r\n\t\"DateOfBirth\":\"1997-09-04\",\t\r\n\t\"Email\":\"{{email}}\",\r\n\t\"Phone\":\"{{phone}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Patients",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST OperationType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"operationtypeid\", data.id);\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"name\", datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\":\"Operation Type {{name}}\",\r\n    \"Phases\": [\r\n        {\r\n            \"Name\": \"Anesthesia/patient preparation\",\r\n            \"Duration\": 10,\r\n            \"Specializations\": {\r\n                \"1\":\"1\",\r\n                \"2\":\"3\"\r\n            }\r\n        },\r\n        {\r\n            \"Name\": \"Surgery\",\r\n            \"Duration\": 20,\r\n            \"Specializations\": {\r\n                \"1\":\"3\",\r\n                \"2\":\"2\"\r\n            }\r\n        },\r\n        {\r\n            \"Name\": \"Cleaning\",\r\n            \"Duration\": 20,\r\n            \"Specializations\": {\r\n                \"2\":\"2\"\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/OperationTypes",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationTypes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Operation Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"id\", data.id);\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"licensenumber\", datetime);\r",
+							"    pm.collectionVariables.set(\"email\", \"email\"+datetime);\r",
+							"    pm.collectionVariables.set(\"phone\", \"phone\"+datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"DeadlineDate\":\"2024-10-25\",\r\n    \"Priority\":\"Elective\",\r\n    \"RequestedByDoctor\":\"{{doctorid}}\",\r\n    \"OperationType\":\"{{operationtypeid}}\",\r\n    \"PatientMedicalRecordNumber\":\"{{patientid}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/OperationRequests",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Operation Request VALID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/OperationRequests/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationRequests",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Operation Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"licensenumber\", datetime);\r",
+							"    pm.collectionVariables.set(\"email\", \"email\"+datetime);\r",
+							"    pm.collectionVariables.set(\"phone\", \"phone\"+datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\":{{id}},\r\n    \"DeadlineDate\":\"2024-10-26\",\r\n    \"Priority\":\"Elective\",\r\n    \"RequestedByDoctor\":\"{{doctorid}}\",\r\n    \"OperationType\":\"{{operationtypeid}}\",\r\n    \"PatientMedicalRecordNumber\":\"{{patientid}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/OperationRequests/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationRequests",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Operation Requests VALIDATE PUT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"    pm.test(\"Check date changed\", function () {\r",
+							"        var jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData.deadlineDate).to.eql(\"26/10/2024 00:00:00\");\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/OperationRequests/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationRequests",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Operation Requests",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/OperationRequests/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationRequests",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Operation Requests VALIDATE INACTIVATE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    pm.test(\"Status code is 404\", function () {\r",
+							"        pm.response.to.have.status(404);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/OperationRequests/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"OperationRequests",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "licensenumber",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "phone",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "MedicalRecord",
+			"value": ""
+		},
+		{
+			"key": "medicalRecord",
+			"value": ""
+		},
+		{
+			"key": "doctorid",
+			"value": ""
+		},
+		{
+			"key": "patientid",
+			"value": ""
+		},
+		{
+			"key": "operationtypeid",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,530 @@
+{
+	"info": {
+		"_postman_id": "c51ae456-9c6e-418a-9ade-af59be99f335",
+		"name": "PATIENT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39008652"
+	},
+	"item": [
+		{
+			"name": "GET TOKEN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"token\", data.access_token);\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "8cb4473b-fbec-4737-ac14-973ccc04d086",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "Ab68Q~1eO-14pX1Bp4tubzUFNBo.qA9jhNZ.tc09",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "api://8cb4473b-fbec-4737-ac14-973ccc04d086/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/f8da0c59-22a8-4891-bc76-7a603e362eac/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"f8da0c59-22a8-4891-bc76-7a603e362eac",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET PATIENT INVALID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"    pm.test('Status code is 404', function () {",
+							"        pm.response.to.have.status(404);",
+							"    });",
+							"} catch (err) {",
+							"    console.error(err);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/Patients/99999",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST PATIENT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"    pm.test('Status code is 201', function () {",
+							"        pm.response.to.have.status(201);",
+							"    });",
+							"    var data = pm.response.json();",
+							"    pm.collectionVariables.set(\"id\", data.id);",
+							"} catch (err) {",
+							"    console.error(err);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"try{\r",
+							"    var moment = require('moment');\r",
+							"    var datetime = moment().format((\"YYYYMMDDHHmmssSSS\"));\r",
+							"    pm.collectionVariables.set(\"email\", \"email\"+datetime+\"@mail.com\");\r",
+							"    pm.collectionVariables.set(\"phone\", \"phone\"+datetime);\r",
+							"} catch (err) {\r",
+							"    console.error(err);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"FirstName\":\"Carlos\",\r\n\t\"LastName\":\"Paula\",\r\n\t\"MedicalRecord\":\"\",\t\r\n\t\"EmergencyContact\":\"123456789\",\t\r\n\t\"Gender\":\"Man\",\t\r\n\t\"DateOfBirth\":\"1998-08-12\",\t\r\n\t\"Email\":\"{{email}}\",\r\n\t\"Phone\":\"{{phone}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Patients",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET PATIENT VALID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"    pm.test('Status code is 200', function () {",
+							"        pm.response.to.have.status(200);",
+							"    });",
+							"} catch (err) {",
+							"    console.error(err);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/Patients/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT PATIENT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"    pm.test('Status code is 200', function () {",
+							"        pm.response.to.have.status(200);",
+							"    });",
+							"} catch (err) {",
+							"    console.error(err);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\":{{id}},\r\n\t\"FirstName\":\"Carlos\",\r\n\t\"LastName\":\"Silva\",\r\n\t\"MedicalRecord\":\"\",\t\r\n\t\"EmergencyContact\":\"123456789\",\t\r\n\t\"Gender\":\"Man\",\t\r\n\t\"DateOfBirth\":\"1998-08-12\",\t\r\n\t\"Email\":\"{{email}}\",\r\n\t\"Phone\":\"{{phone}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Patients/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET PATIENT VALIDATE PUT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"    pm.test('Status code is 200', function () {",
+							"        pm.response.to.have.status(200);",
+							"    });",
+							"    pm.test(\"Check LastName changed\", function () {",
+							"        var jsonData = pm.response.json();",
+							"        pm.expect(jsonData.lastName).to.eql(\"Silva\");",
+							"    });",
+							"} catch (err) {",
+							"    console.error(err);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/Patients/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE PATIENT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"    pm.test('Status code is 202', function () {",
+							"        pm.response.to.have.status(202);",
+							"    });",
+							"} catch (err) {",
+							"    console.error(err);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Patients/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET PATIENT VALIDATE DELETE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"    pm.test('Status code is 404', function () {",
+							"        pm.response.to.have.status(404);",
+							"    });",
+							"} catch (err) {",
+							"    console.error(err);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5001/api/Patients/{{id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Patients",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "phone",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
