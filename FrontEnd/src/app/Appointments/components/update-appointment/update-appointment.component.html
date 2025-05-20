@@ -1,0 +1,49 @@
+<div class="main-content">
+    <div class="header">
+        <h1>Update appointment</h1>
+    </div>
+    <div class="summary">
+        <div class="my-2">
+            <div class="appointment-form-container">
+                <form class="appointment-form" [formGroup]="appointmentForm">
+                    <p>Deadline Date: {{operationRequestDeadline}}</p>
+                    <p>Priority: {{operationRequestPriority}}</p>
+                    <p>Patient: {{patientId}} - {{patientName}}</p>
+                    <div class="mb-3">
+                        <label for="room">Room:</label>
+                        <select class="form-select form-select mb-3" id="room" formControlName="room">
+                            <option *ngFor="let room of rooms" [value]="room.code">
+                                {{room.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="room">Date and time:</label>
+                        <input class="form-control" type="datetime-local" max="2999-12-31 23:59" id="dateTime"
+                            formControlName="dateTime" />
+                    </div>
+                    <label class="mb-2">Phases</label>
+                    <div *ngFor="let phase of phases.controls; let i = index" class="mb-3" style="margin-left: 20px;">
+                        <label class="mb-2">{{phase.value.name}}</label>
+                        <div *ngFor="let value of phase.value.staffs; let j = index" class="mb-3"
+                            style="margin-left: 20px;">
+                            <select class="form-select mb-1" id="id" style="width: 400px;"
+                                (change)="changeStaff(i,j,$event)">
+                                <option></option>
+                                <ng-container *ngFor="let staff of staffList">
+                                    <ng-container *ngIf="staff.specialization == value.specialization">
+                                        <option [value]="staff.id" [selected]="staffIds[i].staff[j]==staff.id">
+                                            {{staff.id}} - {{staff.fullName}}</option>
+                                    </ng-container>
+                                </ng-container>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger" (click)="updateAppointment()">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

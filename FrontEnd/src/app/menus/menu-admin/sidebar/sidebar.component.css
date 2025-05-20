@@ -1,0 +1,45 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #e0e0e0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    color: #d52b1e;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    margin-top: 10px;
+    border-left: 3px solid transparent;
+}
+
+.sidebar a:hover, .sidebar a.active {
+    background-color: #f4f4f4;
+    border-left-color: #d52b1e;
+}
+
+/* Submenu styling */
+.submenu {
+    padding-left: 15px;
+}
+
+.submenu a {
+    font-size: 14px;
+    padding: 8px 0;
+    color: #555;
+}
+
+.submenu a:hover, .submenu a.active {
+    background-color: #d3d3d3;
+    border-left-color: #b22222;
+}

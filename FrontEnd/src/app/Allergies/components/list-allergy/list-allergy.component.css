@@ -1,0 +1,77 @@
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+  }
+  .header {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
+  .summary,
+  .alerts {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  .summary h3,
+  .alerts h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .summary-content,
+  .alerts-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  .summary-item {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    margin: 5px;
+  }
+  .form {
+    min-width: 150px;
+    max-width: 400px;
+    width: 100%;
+  }
+  .full-width{
+    width: 100%;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+  background-color: transparent !important; /* Transparent background */
+  box-shadow: none; /* Remove any shadow or inset effect */
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  border-width: 1px !important; /* Match the Observation style */
+  border-color: #ccc !important; /* Use a neutral color like Observation */
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  border-color: #ccc !important; /* Remove thicker border on focus */
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start {
+  display: none; /* Remove label background outline */
+}
+
+::ng-deep .mat-form-field-label {
+  color: inherit !important; /* Ensure label matches the Observation input */
+}
+
+::ng-deep .mat-input-element {
+  background-color: transparent !important; /* Transparent input field */
+  border: none; /* No inner border */
+}

@@ -1,0 +1,107 @@
+<router-outlet></router-outlet>
+<div class="main-content">
+    <div class="header">
+        <h1>Appointments</h1>
+    </div>
+
+    <div class="summary">
+        <div class="my-4">
+            <div class="filters">
+                <div class="mb-4">
+                    <form class="appointment-form" [formGroup]="filtersForm">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Patient name</th>
+                                    <th>Patient medical record number</th>
+                                    <th>Room</th>
+                                    <th>Date/Time range</th>
+                                    <th></th>
+                                    <th>Staff</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="patientName"
+                                            formControlName="patientNameFilter" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="patientMedicalRecordNumber"
+                                            formControlName="patientMedicalRecordNumberFilter" />
+                                    </td>
+                                    <td>
+                                        <select class="form-select form-select" id="room" formControlName="roomFilter">
+                                            <option [value]=""></option>
+                                            <option *ngFor="let room of rooms" [value]="room.code">{{ room.name }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="datetime-local" max="2999-12-31 23:59"
+                                            id="startDate" formControlName="startDateFilter" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="datetime-local" max="2999-12-31 23:59"
+                                            id="endDate" formControlName="endDateFilter" />
+                                    </td>
+                                    <td>
+                                        <select class="form-select form-select" id="staff"
+                                            formControlName="staffFilter">
+                                            <option [value]=""></option>
+                                            <option *ngFor="let staff of staffs" [value]="staff.id">{{ staff.fullName }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-danger" (click)="searchWithFilters()">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+            <div class="appointments-table">
+                <table class="table" matSort (matSortChange)="sortData($event)">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th mat-sort-header="patient" scope="col">Patient</th>
+                            <th mat-sort-header="room" scope="col">Room</th>
+                            <th mat-sort-header="dateTime" scope="col">Date Time</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let appointment of appointmentList; let index = index">
+                            <th class="table-item" scope="row">{{ index + 1 }}</th>
+                            <td class="table-item">{{ appointment.patientId }} - {{ appointment.patientFullName }}</td>
+                            <td class="table-item">{{ appointment.room }}</td>
+                            <td class="table-item">{{ appointment.dateTime }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger m-2"
+                                    (click)="updateAppointment(appointment)">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @if (appointmentList == null || appointmentList == undefined) {
+    <div class="text-center">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-danger" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+    }
+</div>

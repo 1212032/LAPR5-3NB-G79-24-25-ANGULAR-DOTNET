@@ -1,0 +1,76 @@
+<div class="sidebar">
+    <h2>Hospital Manager - Admin</h2>
+
+    <!-- Patient Profile Management -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('patient')">Patient Profile Management</a>
+        <div *ngIf="activeMenu === 'patient'" class="submenu">
+            <a routerLink="/admin/patient/create" routerLinkActive="active">Create Patient Profile</a>
+            <a routerLink="/admin/patient/search" routerLinkActive="active">Search Patient Profiles</a>
+        </div>
+    </div>
+
+    <!-- Staff Profile Management -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('staff')">Staff Profile Management</a>
+        <div *ngIf="activeMenu === 'staff'" class="submenu">
+            <a routerLink="/admin/staff/create" routerLinkActive="active">Create Staff Profile</a>
+            <a routerLink="/admin/staff/search" routerLinkActive="active">Search Staff Profiles</a>
+        </div>
+    </div>
+
+    <!-- Operation Type Management -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('operationType')">Operation Type Management</a>
+        <div *ngIf="activeMenu === 'operationType'" class="submenu">
+            <a routerLink="/admin/operationtype/create" routerLinkActive="active">Create Operation Type</a>
+            <a routerLink="/admin/operationtype/search" routerLinkActive="active">Search Operation Types</a>
+        </div>
+    </div>
+
+    <!-- Allergy Management -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('allergy')">Allergy Management</a>
+        <div *ngIf="activeMenu === 'allergy'" class="submenu">
+            <a routerLink="/admin/allergy/create" routerLinkActive="active">Create Allergy</a>
+            <a routerLink="/admin/allergy/search" routerLinkActive="active">Search Allergies</a>
+        </div>
+    </div>
+
+    <!-- Medical Condition Management -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('medicalCondition')">Medical Condition Management</a>
+        <div *ngIf="activeMenu === 'medicalCondition'" class="submenu">
+            <a routerLink="/admin/medicalcondition/create" routerLinkActive="active">Create Medical Condition</a>
+            <a routerLink="/admin/medicalcondition/search" routerLinkActive="active">Search Medical Conditions</a>
+        </div>
+    </div>
+
+    <!-- Specializations Management -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('specialization')">Specializations Management</a>
+        <div *ngIf="activeMenu === 'specialization'" class="submenu">
+            <a routerLink="/admin/specialization/create" routerLinkActive="active">Create Specialization</a>
+            <a routerLink="/admin/specialization/search" routerLinkActive="active">Search Specializations</a>
+        </div>
+    </div>
+
+    <!-- Room Management -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('room')">Rooms Management</a>
+        <div *ngIf="activeMenu === 'room'" class="submenu">
+            <a routerLink="/admin/room/create" routerLinkActive="active">Create Room</a>
+        </div>
+    </div>
+
+    <!-- Patient Requests -->
+    <div class="menu-item">
+        <a (click)="toggleSubMenu('requests')">Patient Requests</a>
+        <div *ngIf="activeMenu === 'requests'" class="submenu">
+            <a routerLink="/admin/patientrequests" routerLinkActive="active">List Patient Requests</a>
+        </div>
+    </div>
+
+    <!-- Logout -->
+    <a (click)="logout()">Logout</a>
+</div>

@@ -1,0 +1,58 @@
+<div class="main-content">
+    <div class="header">
+        <h1>Create medical condition</h1>
+    </div>
+    <div class="summary">
+        <div class="my-2">
+            <div class="medical-condition-form-container">
+                <form class="medical-condition-form" [formGroup]="medicalConditionForm">
+                    <div class="mb-3 code">
+                        <label for="code">Code:</label>
+                        <input class="form-control" type="text" id="code" formControlName="code" />
+                    </div>
+                    <div class="mb-3 name">
+                        <label for="name">Name:</label>
+                        <input class="form-control" type="text" id="name" formControlName="name" />
+                    </div>
+                    <div class="mb-3 description">
+                        <label for="description">Description:</label>
+                        <input class="form-control" type="text" id="description" formControlName="description" />
+                    </div>
+                    <div>
+                        <label class="mb-2">Symptoms</label>
+                        <div class="mb-3 preparationPhase" style="margin-left: 20px;">
+
+                            <div formArrayName="symptoms">
+
+                                <table class="table">
+                                    <tbody class="row" *ngFor="let symptom of symptoms.controls; let i = index"
+                                        [formGroupName]="i">
+                                        <tr class="mb-1">
+                                            <td>
+                                                <label for="symptom">Symptom:</label>
+                                                <input class="form-control" type="text" id="symptom"
+                                                    formControlName="symptom" />
+                                            </td>
+                                            <td class="mb-1">
+                                                <button class="btn btn-danger" style="margin-top: 24px;"
+                                                    (click)="removeSymptom(i)"><i
+                                                        class="fa-solid fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <button class="btn btn-danger" (click)="addSymptom()"><i
+                                            class="fa-solid fa-plus"></i></button>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger" (click)="createMedicalCondition()">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

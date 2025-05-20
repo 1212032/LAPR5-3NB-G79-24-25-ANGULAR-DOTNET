@@ -1,0 +1,71 @@
+<div class="main-content">
+    <div class="summary">
+        <div class="my-2">
+            <h5>Filter allergies:</h5>
+            <div class="allergy-container">
+                <app-list-allergy [myControl]="allergyFilter"
+                    (selectedAllergy)="filterAllergy($event)"></app-list-allergy>
+            </div>
+            <h5>Allergies:</h5>
+            <div class="medical-record-form-container">
+                <div class="allergy-container" *ngFor="let allergy of allergiesIndexes; let i = index">
+                    <div class="allergy-wrapper" *ngIf="allergiesVisible[i]">
+                        <app-list-allergy [myControl]="allergyControls[i]"
+                            (selectedAllergy)="onAllergySelected($event, i)"></app-list-allergy>
+                        <label>Observation:</label>
+                        <!-- (allergiesEmmiter)="onAllergiesReceived($event)" -->
+                        <input class="observation-allergy form-control" [(ngModel)]="observationsAllergy[i]"
+                            type="text">
+                        <button class="btn btn-danger remove-btn" (click)="removeAllergy(i)">-</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-danger add-btn" (click)="addAllergy()">+</button>
+
+        </div>
+    </div>
+
+    <div class="summary">
+        <div class="my-2">
+            <h5>Filter medical conditions:</h5>
+            <div class="medicalCondition-container">
+                <app-list-medical-condition [myControl]="medicalConditionFilter"
+                    (selectedCondition)="filterMedicalCondition($event)"></app-list-medical-condition>
+            </div>
+            <h5>Medical conditions:</h5>
+            <div class="medicalCondition-container"
+                *ngFor="let medicalCondition of medicalConditionsIndexes; let i = index">
+                <div class="medicalCondition-wrapper" *ngIf="medicalConditionsVisible[i]">
+                    <app-list-medical-condition [myControl]="medicalConditionControls[i]"
+                        (selectedCondition)="onMedicalConditionSelected($event, i)"></app-list-medical-condition>
+                    <label>Observation:</label>
+                    <!-- (medicalConditionsEmmiter)="onMedicalConditionsReceived($event)" -->
+                    <input class="observation-medicalCondition form-control"
+                        [(ngModel)]="observationsMedicalCondition[i]" type="text">
+                    <button class="btn btn-danger remove-btn" (click)="removeMedicalCondition(i)">-</button>
+                </div>
+            </div>
+            <button class="btn btn-danger add-btn" (click)="addMedicalCondition()">+</button>
+
+        </div>
+    </div>
+
+    <div class="summary">
+        <div class="my-2">
+            <h5>Filter texts:</h5>
+            <div class="editor-container">
+                <input class="form-control" type="text" [(ngModel)]="filterEditor" (input)="filterEditors($event)">
+            </div>
+            <h5>Free texts:</h5>
+            <div class="editor-container" *ngFor="let editor of editors; let i = index">
+                <div class="editor-wrapper" *ngIf="editorsVisible[i]">
+                    <app-rich-text [(content)]="richTextsList[i]"
+                        (contentChange)="updateContent($event, i)"></app-rich-text>
+                    <button class="btn btn-danger remove-btn" (click)="removeRichtText(i)">-</button>
+                </div>
+            </div>
+            <button class="btn btn-danger add-btn" (click)="addNewRichtText()">+</button>
+        </div>
+        <button class="btn btn-danger update-btn" (click)="updateMedicalRecord()">Update medical record</button>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<router-outlet></router-outlet>
+<div class="main-content">
+    <div class="header">
+        <h1>Allergies</h1>
+    </div>
+
+    <div class="summary">
+        <div class="my-4">
+            <div class="filters">
+                <div class="mb-4">
+                    <form class="allergy-form" [formGroup]="filtersForm">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="code" formControlName="code">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="name" formControlName="name">
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-danger" (click)="getAllergies()">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="allergy-table">
+                <table class="table" matSort (matSortChange)="sortData($event)">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th mat-sort-header="code" scope="col">Code</th>
+                            <th mat-sort-header="name" scope="col">Name</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let allergy of allergyList; let index = index">
+                            <th class="table-item" scope="row">{{ index + 1 }}</th>
+                            <td class="table-item">{{ allergy.code }}</td>
+                            <td class="table-item">{{ allergy.name }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger m-2" (click)="updateAllergy(allergy)">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(allergyList==null) {
+<div class="text-center">
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+}
