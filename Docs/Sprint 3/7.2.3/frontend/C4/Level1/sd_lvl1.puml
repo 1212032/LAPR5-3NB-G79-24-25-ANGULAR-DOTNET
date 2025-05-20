@@ -1,0 +1,17 @@
+@startuml
+title "Search Allergy"
+
+actor Doctor
+participant "System" as Sys
+
+Doctor -> Sys : Search Allergy
+activate Sys
+        
+alt User not Allowed
+        Doctor <--Sys : response status 401 
+else Allergy found
+        Doctor <--Sys : response status 200
+end
+deactivate Sys
+
+@enduml

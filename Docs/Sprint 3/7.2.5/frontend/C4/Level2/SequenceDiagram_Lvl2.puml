@@ -1,0 +1,25 @@
+@startuml
+title "Search Medical Condition"
+actor Doctor
+
+participant "FrontEnd" as spa
+participant "BackEnd2" as BackEnd
+
+
+Doctor->spa: Create Medical Condition
+activate spa
+spa-> BackEnd : HTTP Request: GET /medicalConditions
+activate BackEnd
+
+alt User not Allowed
+    spa<--BackEnd : status 401
+    Doctor<-spa: status 401
+else Medical Condition found
+    spa<--BackEnd : status 200
+    Doctor <-spa: status 200
+    deactivate spa
+    deactivate BackEnd
+end
+
+
+@enduml

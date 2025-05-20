@@ -1,0 +1,29 @@
+@startuml
+title "Request to update allergy"
+
+actor Admin
+participant "System" as Sys
+
+Admin -> Sys : Request to search allergies
+activate Sys
+Sys --> Admin: Display list of allergies
+deactivate Sys
+
+opt
+Admin -> Sys: Change filters
+activate Sys
+Sys --> Admin: Display list of allergies
+deactivate Sys
+end
+
+Admin -> Sys : Select allergy to update
+activate Sys
+Sys --> Admin: Display allergy information
+deactivate Sys
+
+Admin -> Sys : Change allergy information and submit
+activate Sys
+Sys --> Admin: Display success
+deactivate Sys
+
+@enduml

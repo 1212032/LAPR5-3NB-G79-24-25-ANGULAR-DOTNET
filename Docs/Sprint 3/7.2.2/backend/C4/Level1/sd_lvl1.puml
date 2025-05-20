@@ -1,0 +1,17 @@
+@startuml
+title "Create Allergy"
+
+actor Admin
+participant "System" as Sys
+
+Admin -> Sys : Create new Allergy
+activate Sys
+        
+alt User not Allowed
+        Admin <--Sys : response status 401 
+else Allergy created successfully
+        Admin <--Sys : response status 200
+end
+deactivate Sys
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+title "Create Allergy"
+
+participant "<<View>>\nSPA" as spa
+participant "<<ViewModel>>\nAllergyComponent" as viewModel
+participant "<<Controller>>\nAllergyService" as service
+participant "<<Model>>\nDto" as dto
+participant "BackEnd2" as BackEnd
+
+
+->spa: request and operation
+    activate spa
+    spa->viewModel: createAllergy()
+    activate viewModel
+    viewModel-> dto: create
+    viewModel-> service : createAllergy(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: Post /allergies
+activate BackEnd
+
+
+ref over BackEnd
+                CreateAllergy
+                ../backend/C4/level3/sd_lvl3.puml
+        end ref
+
+alt User not Allowed
+
+        service<--BackEnd : status 401
+        spa<--service:status 401
+        <--spa:Displays status 401 message
+
+else Allergy created successfully
+        
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+    spa<--service:status 200
+    deactivate service
+<--spa:Displays status 405 message
+deactivate spa
+end
+@enduml

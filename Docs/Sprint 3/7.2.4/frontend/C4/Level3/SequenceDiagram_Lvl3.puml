@@ -1,0 +1,43 @@
+@startuml
+title "Create Medical Condition"
+
+participant "SPA" as spa
+participant "CreateMedicalConditionComponent" as viewModel
+participant "MedicalConditionService" as service
+participant "Dto" as dto
+participant "BackEnd2" as BackEnd
+
+
+->spa: request an operation
+    activate spa
+    spa->viewModel: createMedicalCondition()
+    activate viewModel
+    viewModel-> dto: create
+    viewModel-> service : createMedicalCondition(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: Post /medicalConditions
+activate BackEnd
+
+
+ref over BackEnd
+                CreateMedicalCondition
+                ../backend/C4/level3/SequenceDiagram_Lvl3.puml
+        end ref
+
+alt User not Allowed
+
+        service<--BackEnd : status 401
+        spa<--service:status 401
+        <--spa:Displays status 401 message
+
+else Medical Condition created successfully
+        
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+    spa<--service:status 200
+    deactivate service
+<--spa:Displays status 405 message
+deactivate spa
+end
+@enduml

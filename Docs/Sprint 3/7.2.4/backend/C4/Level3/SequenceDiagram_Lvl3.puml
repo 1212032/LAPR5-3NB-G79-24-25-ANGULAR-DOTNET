@@ -1,0 +1,45 @@
+@startuml
+title "Create Medical Condition"
+participant "CreateMedicalConditionController" as controller
+participant "MedicalConditionService" as service
+participant "MedicalCondition" as mc
+
+participant "MedicalConditionRepo" as repo
+participant "MedicalConditionMap" as mapper
+participant "Dto" as dto
+database "Database" as db
+
+
+->controller: HTTP Request: Post /medicalConditions()
+activate controller
+alt User not Allowed
+    <--controller: status 401
+end
+controller-> service : createMedicalCondition(dto)
+activate service
+service-> mc : create
+service-> repo: save(dto)
+activate repo
+
+repo-> db: save(dto)
+repo-> mapper: toDTO()
+activate mapper
+mapper-> dto : create
+mapper-->repo: dto
+deactivate mapper
+
+
+
+alt Operation Request successfully
+
+    repo-->service : dto
+    deactivate repo
+
+    service-->controller: dto
+    deactivate service
+
+    <--controller: status 200
+    deactivate controller
+
+end
+@enduml

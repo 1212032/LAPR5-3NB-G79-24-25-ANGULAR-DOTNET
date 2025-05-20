@@ -1,0 +1,17 @@
+@startuml
+title "Search Medical Condition"
+
+actor Doctor
+participant "System" as Sys
+
+Doctor -> Sys : Search Medical Condition
+activate Sys
+        
+alt User not Allowed
+        Doctor <--Sys : response status 401 
+else Medical Condition found
+        Doctor <--Sys : response status 200
+end
+deactivate Sys
+
+@enduml

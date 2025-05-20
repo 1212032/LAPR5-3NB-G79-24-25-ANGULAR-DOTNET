@@ -1,0 +1,46 @@
+@startuml
+title "Search Allergy"
+
+participant "SPA" as spa
+participant "SearchAllergyComponent" as viewModel
+participant "AllergyService" as service
+participant "Dto" as dto
+participant "BackEnd2" as BackEnd
+
+
+->spa: search Allergy
+    activate spa
+    spa->viewModel: getAllAllergy()
+    activate viewModel
+    viewModel-> service : getAllAllergy(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: GET /allergies
+activate BackEnd
+
+
+ref over BackEnd
+                getAllAllergy
+                ../backend/C4/level3/sd_lvl3.puml
+        end ref
+
+alt User not Allowed
+
+        service<--BackEnd : status 401
+        spa<--service:status 401
+        <--spa:Displays status 401 message
+
+else Allergy created successfully
+        
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+        loop for each allergy
+                service->dto: create
+        end
+
+        spa<--service:status 200
+        deactivate service
+<--spa:Displays status 200 message
+deactivate spa
+end
+@enduml

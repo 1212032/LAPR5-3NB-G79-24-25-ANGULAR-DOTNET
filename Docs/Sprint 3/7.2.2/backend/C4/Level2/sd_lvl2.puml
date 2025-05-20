@@ -1,0 +1,23 @@
+@startuml
+title "Create Allergy"
+actor Admin
+
+participant "FrontEnd" as spa
+participant "BackEnd2" as BackEnd
+
+
+Admin->spa: Create Allergy
+activate spa
+spa-> BackEnd : HTTP Request: POST /allergy
+activate BackEnd
+
+alt User not Allowed
+    spa<--BackEnd : status 401
+    Admin<-spa: status 401
+else Allergy created successfully
+    spa<--BackEnd : status 200
+    Admin<-spa: status 200
+    deactivate spa
+    deactivate BackEnd
+end
+@enduml

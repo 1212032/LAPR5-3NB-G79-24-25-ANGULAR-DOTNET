@@ -1,0 +1,46 @@
+@startuml
+title "Request to update allergy"
+participant "Route" as Route
+participant "AllergyController" as Controller
+participant "AllergyService" as Service
+participant "AllergyRepo" as ARepo
+
+--> Route: HTTP Request:\nGet /Allergies
+Route -> Controller: getAllergies()
+activate Controller
+Controller -> Service: getAllergies(code,name)
+activate Service
+Service -> ARepo: getAllergies(code,name)
+activate ARepo
+ARepo --> Service: return allergy list
+deactivate ARepo
+Service --> Controller: return allergy dto list
+deactivate Service
+<-- Controller: return allergy dto list
+deactivate Controller
+
+
+--> Route: HTTP Request:\nPUT /Allergies
+Route -> Controller: updateAllergy(id)
+activate Controller
+
+Controller -> Service: updateAllergy(id,dto)
+activate Service
+
+Service -> ARepo: findByDomainId(id)
+activate ARepo
+
+ARepo --> Service: return allergy
+deactivate ARepo
+
+Service -> Service: update allergy
+
+Service -> ARepo: save(allergy)
+
+Service --> Controller: return allergy DTO
+deactivate Service
+
+<-- Controller: return allergy DTO
+deactivate Controller
+
+@enduml

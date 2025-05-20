@@ -1,0 +1,89 @@
+@startuml
+title "Request to update allergy"
+actor Admin
+participant "<<View>>\nSearchAllergy" as SearchView
+participant "<<Controller>>\nSearchAllergyComponent" as SearchController
+participant "<<View>>\nUpdateAllergy" as UpdateView
+participant "<<Controller>>\nUpdateAllergyComponent" as UpdateController
+participant "<<Service>>\nAllergyService" as AService
+participant "BackEnd" as BackEnd
+
+Admin -> SearchView: Request to search allergies
+activate SearchView
+SearchView -> SearchController: onInit()
+activate SearchController
+
+SearchController -> AService: getAllergies()
+activate AService
+AService -> BackEnd: HTTP Request: GET /Allergies\nGet all allergies
+activate BackEnd
+BackEnd --> AService: Return list of allergy DTO
+deactivate BackEnd
+AService --> SearchController: Return list of allergy DTO
+deactivate AService
+
+SearchController --> SearchView: Build list of allergies
+deactivate SearchController
+SearchView --> Admin: Display list of allergies
+deactivate SearchView
+
+
+opt
+Admin -> SearchView: Change filters
+activate SearchView
+SearchView -> SearchController: getAllergies(code,name)
+activate SearchController
+SearchController -> AService: getAllergies(code,name)
+activate AService
+AService -> BackEnd: HTTP Request: GET /Allergies\nGet all allergies
+activate BackEnd
+BackEnd --> AService: Return list of allergy DTO
+deactivate BackEnd
+AService --> SearchController: Return list of allergy DTO
+deactivate AService
+SearchController --> SearchView: Build list of allergies
+deactivate SearchController
+SearchView --> Admin: Display list of allergies
+deactivate SearchView
+end
+
+
+Admin -> UpdateView: Select allergy to update
+activate UpdateView
+UpdateView -> UpdateController: onInit(allergyId)
+activate UpdateController
+
+UpdateController -> AService: getAllergy(allergyId)
+activate AService
+AService -> BackEnd: HTTP Request: GET /Allergies/id\nGet allergy
+activate BackEnd
+BackEnd --> AService: Return allergy dto
+deactivate BackEnd
+AService --> UpdateController: Return allergy dto
+deactivate AService
+
+UpdateController --> UpdateView: Build allergy form
+deactivate UpdateController
+UpdateView --> Admin: Display allergy form
+deactivate UpdateView
+
+
+Admin -> UpdateView : Change allergy information and submit
+activate UpdateView
+UpdateView -> UpdateController: updateAllergy()
+activate UpdateController
+UpdateController -> UpdateController: createDto()
+UpdateController -> AService: updateAllergy(allergyDto)
+activate AService
+AService -> BackEnd: HTTP Request: PUT /Allergies/id\nUpdate allergy
+activate BackEnd
+BackEnd --> AService: Return allergy dto
+deactivate BackEnd
+AService --> UpdateController: Return allergy dto
+deactivate AService
+UpdateController --> UpdateView: Return success
+deactivate UpdateController
+UpdateView --> Admin: Display success
+deactivate UpdateView
+
+@enduml

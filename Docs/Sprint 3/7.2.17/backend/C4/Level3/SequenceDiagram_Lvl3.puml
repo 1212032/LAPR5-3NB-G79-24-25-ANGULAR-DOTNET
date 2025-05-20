@@ -1,0 +1,46 @@
+@startuml
+title "Request to update medical condition"
+participant "Route" as Route
+participant "MedicalConditionController" as Controller
+participant "MedicalConditionService" as Service
+participant "MedicalConditionRepo" as ARepo
+
+--> Route: HTTP Request:\nGet /MedicalConditions
+Route -> Controller: getMedicalConditions()
+activate Controller
+Controller -> Service: getMedicalConditions(code,name)
+activate Service
+Service -> ARepo: getMedicalConditions(code,name)
+activate ARepo
+ARepo --> Service: return medical condition list
+deactivate ARepo
+Service --> Controller: return medical condition dto list
+deactivate Service
+<-- Controller: return medical condition dto list
+deactivate Controller
+
+
+--> Route: HTTP Request:\nPUT /MedicalConditions
+Route -> Controller: updateMedicalCondition(id)
+activate Controller
+
+Controller -> Service: updateMedicalCondition(id,dto)
+activate Service
+
+Service -> ARepo: findByDomainId(id)
+activate ARepo
+
+ARepo --> Service: return medical condition
+deactivate ARepo
+
+Service -> Service: update medical condition
+
+Service -> ARepo: save(medical condition)
+
+Service --> Controller: return medical condition DTO
+deactivate Service
+
+<-- Controller: return medical condition DTO
+deactivate Controller
+
+@enduml

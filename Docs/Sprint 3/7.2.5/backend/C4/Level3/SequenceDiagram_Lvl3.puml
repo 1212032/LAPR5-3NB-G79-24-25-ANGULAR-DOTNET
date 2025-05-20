@@ -1,0 +1,53 @@
+@startuml
+title "Search Medical Condition"
+
+participant "CreateMedicalConditionController" as controller
+participant "MedicalConditionService" as service
+
+participant "MedicalConditionRepo" as repo
+participant "MedicalConditionMap" as mapper
+participant "MedicalCondition" as mc
+participant "Dto" as dto
+database "Database" as db
+
+
+->controller: HTTP Request: GET /medicalConditions
+activate controller
+alt User not Allowed
+    <--controller: status 401
+end
+controller-> service : getAllMedicalConditions()
+activate service
+service-> repo: findAll()
+activate repo
+
+repo-> db: find()
+loop for each medical condition
+    repo-> mapper: toDomain()
+    activate mapper
+    mapper-> mc : create
+    mapper-->repo: medicalCondtition
+    deactivate mapper
+end
+
+
+
+alt Operation Request successfully
+
+    repo-->service : medicalConditionList
+    deactivate repo
+    loop for each medical condition
+        service->mapper: toDto()
+            activate mapper
+            mapper->dto : create
+        mapper-->service: dto
+        deactivate mapper 
+    end
+    service-->controller: dtoList
+    deactivate service
+
+    <--controller: status 200
+    deactivate controller
+
+end
+@enduml

@@ -1,0 +1,45 @@
+@startuml
+title "Request to update allergy"
+actor Admin
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Admin -> FrontEnd : Request to search allergies
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Allergies\nGet all allergies
+activate BackEnd
+BackEnd --> FrontEnd: Return allergies
+deactivate BackEnd
+FrontEnd --> Admin: Display list of allergies
+deactivate FrontEnd
+
+opt
+Admin -> FrontEnd: Change filters
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Allergies\nGet all allergies
+activate BackEnd
+BackEnd --> FrontEnd: Return allergies
+deactivate BackEnd
+FrontEnd --> Admin: Display list of allergies
+deactivate FrontEnd
+end
+
+Admin -> FrontEnd : Select allergy to update
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /Allergies/id\nGet selected allergy
+activate BackEnd
+BackEnd --> FrontEnd: Return allergy
+deactivate BackEnd
+FrontEnd --> Admin: Display allergy information
+deactivate FrontEnd
+
+Admin -> FrontEnd : Change allergy information and submit
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: PUT /Allergy
+activate BackEnd
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+FrontEnd --> Admin: Display success
+deactivate FrontEnd
+
+@enduml

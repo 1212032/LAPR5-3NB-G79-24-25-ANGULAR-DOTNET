@@ -1,0 +1,17 @@
+@startuml
+title "Create Medical Condition"
+
+actor Admin
+participant "System" as Sys
+
+Admin -> Sys : Create new Medical Condition
+activate Sys
+        
+alt User not Allowed
+        Admin <--Sys : response status 401 
+else Medical Condition created successfully
+        Admin <--Sys : response status 200
+end
+deactivate Sys
+
+@enduml

@@ -1,0 +1,53 @@
+@startuml
+title "Search Allergy"
+
+participant "CreateAllergyController" as controller
+participant "AllergyService" as service
+
+participant "AllergyRepo" as repo
+participant "AllergyMap" as mapper
+participant "Allergy" as a
+participant "Dto" as dto
+database "Database" as db
+
+
+->controller: HTTP Request: GET /allergies
+activate controller
+alt User not Allowed
+    <--controller: status 401
+end
+controller-> service : getAllAllergies()
+activate service
+service-> repo: findAll()
+activate repo
+
+repo-> db: find()
+loop for each allergy
+    repo-> mapper: toDomain()
+    activate mapper
+    mapper-> a : create
+    mapper-->repo: allergy
+    deactivate mapper
+end
+
+
+
+alt Operation Request successfully
+
+    repo-->service : allergyList
+    deactivate repo
+    loop for each allergy
+        service->mapper: toDto()
+            activate mapper
+            mapper->dto : create
+        mapper-->service: dto
+        deactivate mapper 
+    end
+    service-->controller: dtoList
+    deactivate service
+
+    <--controller: status 200
+    deactivate controller
+
+end
+@enduml

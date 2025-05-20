@@ -1,0 +1,46 @@
+@startuml
+title "Search Medical Condition"
+
+participant "SPA" as spa
+participant "SearchMedicalConditionComponent" as viewModel
+participant "MedicalConditionService" as service
+participant "Dto" as dto
+participant "BackEnd2" as BackEnd
+
+
+->spa: search Medical Condition
+    activate spa
+    spa->viewModel: getAllMedicalCondition()
+    activate viewModel
+    viewModel-> service : getAllMedicalCondition(dto)
+    activate service
+
+service-> BackEnd: HTTP Request: GET /medicalConditions
+activate BackEnd
+
+
+ref over BackEnd
+                getAllMedicalCondition
+                ../backend/C4/level3/SequenceDiagram_Lvl3.puml
+        end ref
+
+alt User not Allowed
+
+        service<--BackEnd : status 401
+        spa<--service:status 401
+        <--spa:Displays status 401 message
+
+else Medical Condition created successfully
+        
+        service<--BackEnd : status 200 
+        deactivate BackEnd
+        loop for each medical Condition
+                service->dto: create
+        end
+
+        spa<--service:status 200
+        deactivate service
+<--spa:Displays status 200 message
+deactivate spa
+end
+@enduml

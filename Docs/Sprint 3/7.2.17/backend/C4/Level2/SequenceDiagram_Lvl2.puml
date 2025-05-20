@@ -1,0 +1,45 @@
+@startuml
+title "Request to update medical condition"
+actor Admin
+participant "FrontEnd" as FrontEnd
+participant "BackEnd" as BackEnd
+
+Admin -> FrontEnd : Request to search medical conditions
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /medicalconditions\nGet all medical conditions
+activate BackEnd
+BackEnd --> FrontEnd: Return medical conditions
+deactivate BackEnd
+FrontEnd --> Admin: Display list of medical conditions
+deactivate FrontEnd
+
+opt
+Admin -> FrontEnd: Change filters
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /medicalconditions\nGet all medical conditions
+activate BackEnd
+BackEnd --> FrontEnd: Return medical conditions
+deactivate BackEnd
+FrontEnd --> Admin: Display list of medical conditions
+deactivate FrontEnd
+end
+
+Admin -> FrontEnd : Select medical condition to update
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: GET /medicalconditions/id\nGet selected medical condition
+activate BackEnd
+BackEnd --> FrontEnd: Return medical condition
+deactivate BackEnd
+FrontEnd --> Admin: Display medical condition information
+deactivate FrontEnd
+
+Admin -> FrontEnd : Change medical condition information and submit
+activate FrontEnd
+FrontEnd -> BackEnd: HTTP Request: PUT /medicalconditions
+activate BackEnd
+BackEnd --> FrontEnd: Return success
+deactivate BackEnd
+FrontEnd --> Admin: Display success
+deactivate FrontEnd
+
+@enduml
