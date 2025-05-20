@@ -1,0 +1,133 @@
+<router-outlet></router-outlet>
+<div class="main-content">
+    <div class="header">
+        <h1>Staff</h1>
+    </div>
+
+    <div class="summary">
+        <div class="my-4">
+            <div class="filters">
+                <div class="mb-4">
+                    <form class="staff-form" [formGroup]="filtersForm">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>License number</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Specialization</th>
+                                    <th>Active</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="licenseNumber"
+                                            formControlName="licenseNumber">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="name" formControlName="name">
+                                    </td>
+                                    <td>
+                                        <select class="form-select" id="role" formControlName="role">
+                                            <option value=""></option>
+                                            <option value="Doctor">Doctor</option>
+                                            <option value="Nurse">Nurse</option>
+                                            <option value="Technician">Technician</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-select" id="specialization"
+                                            formControlName="specialization">
+                                            <option [value]="0"> </option>
+                                            <option *ngFor="let specialization of specializations"
+                                                [value]="specialization.id">
+                                                {{ specialization.name }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="true"
+                                            id="flexCheckDefault" formControlName="active" style="margin-top: 10px;"
+                                            checked>
+                                        <label class="form-check-label" for="flexCheckDefault"
+                                            style="margin-top: 6px; margin-left: 10px;">Active</label>
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-danger" (click)="getStaff()">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="staff-table">
+                <table class="table" matSort (matSortChange)="sortData($event)">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th mat-sort-header="licenseNumber" scope="col">License Number</th>
+                            <th mat-sort-header="fullName" scope="col">Name</th>
+                            <th mat-sort-header="role" scope="col">Role</th>
+                            <th mat-sort-header="specialization" scope="col">Specialization</th>
+                            <th mat-sort-header="active" scope="col">Active</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let staff of staffList; let index = index">
+                            <th class="table-item" scope="row">{{ index + 1 }}</th>
+                            <td class="table-item">{{ staff.licenseNumber }}</td>
+                            <td class="table-item">{{ staff.fullName }}</td>
+                            <td class="table-item">{{ staff.role }}</td>
+                            <td class="table-item">{{ staff.specializationName }}</td>
+                            <td class="table-item">{{ staff.active }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger m-2"
+                                    (click)="updateStaff(staff)">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal"
+                                    [disabled]="!staff.active" data-bs-target="#exampleModal"
+                                    (click)="selectedStaff(staff)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Inactivate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">Inactivate {{selectedStaffName}}?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="inactivateStaff()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(staffList==null) {
+<div class="text-center">
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,8 @@
+obj/
+bin/
+*.vpp.bak_*
+nuget.config
+.vscode/launch.json
+.vscode/tasks.json
+three.js-master/
+lodash/

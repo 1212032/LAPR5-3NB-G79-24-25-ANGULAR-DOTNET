@@ -1,0 +1,48 @@
+/* You can add global styles to this file, and also import other style files */
+/* style for log-in menu */
+/* Pallet colors: 
+blac
+#21272D
+red
+#EA5141
+white
+#F9F6ED */
+.Navigation-Sidebar {
+    background-color: #f0f0f0;
+    padding: 20px;
+    width: 200px;
+    height: 100vh;
+    /* Adjust width as needed */
+}
+
+.Sidebar-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.Sidebar-content ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.Sidebar-content li {
+    margin-bottom: 10px;
+}
+
+.Sidebar-content a {
+    text-decoration: none;
+    color: #333;
+}
+.Navigation-wrapper {
+    display: flex;
+    height: 100vh;
+    background-color: #F0F0F0;
+  }
+  
+  .Navigation-Sidebar {
+    flex: 0 0 200px; /* Adjust the width as needed */
+  }
+  
+  .NavigationViewContainer-Wrapper {
+    flex: 1; /* Takes up the remaining space */
+  }

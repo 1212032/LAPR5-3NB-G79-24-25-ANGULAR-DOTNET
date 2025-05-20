@@ -1,0 +1,75 @@
+<div class="main-content">
+    <div class="header">
+        <h1>Update staff</h1>
+    </div>
+    <div class="summary">
+        <div class="my-2">
+            <div class="staff-form-container">
+                <form class="staff-form" [formGroup]="staffForm">
+                    <div class="mb-3 licenseNumber">
+                        <label for="licenseNumber">License Number:</label>
+                        <input class="form-control" type="text" id="licenseNumber" formControlName="licenseNumber" />
+                    </div>
+                    <div class="mb-3 email">
+                        <label for="email">Email:</label>
+                        <input class="form-control" type="email" id="email" formControlName="email" />
+                    </div>
+                    <div class="mb-3 phone">
+                        <label for="phone">Phone:</label>
+                        <input class="form-control" type="text" id="phone" formControlName="phone" />
+                    </div>
+                    <div class="mb-3 firstName">
+                        <label for="firstName">First name:</label>
+                        <input class="form-control" type="text" id="firstName" formControlName="firstName" />
+                    </div>
+                    <div class="mb-3 lastName">
+                        <label for="lastName">Last name:</label>
+                        <input class="form-control" type="text" id="lastName" formControlName="lastName" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="role">Role:</label>
+                        <select class="form-select" id="role" formControlName="role">
+                            <option value="Doctor">Doctor</option>
+                            <option value="Nurse">Nurse</option>
+                            <option value="Technician">Technician</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="specialization">Specialization:</label>
+                        <select class="form-select" id="specialization"
+                            formControlName="specialization">
+                            <option *ngFor="let specialization of specializations" [value]="specialization.id">
+                                {{specialization.name}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <label>Availability slots:</label>
+                    <div formArrayName="availabilitySlots">
+                        <table class="table" >
+                            <tbody class="row" *ngFor="let slot of slots.controls; let i = index" [formGroupName]="i">
+                                <tr>
+                                <td>
+                                    <input class="form-control" type="datetime-local" max="2999-12-31 23:59" id="fromDateTime" formControlName="fromDateTime"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" type="datetime-local" max="2999-12-31 23:59" id="toDateTime" formControlName="toDateTime"/>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" (click)="removeSlot(i)">Remove slot</button>
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="btn btn-danger" (click)="addSlot()">Add availability slot</button>
+                    </div>
+                    <br>
+                    <br>
+                    <button type="submit" class="btn btn-danger" (click)="updateStaff()">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
