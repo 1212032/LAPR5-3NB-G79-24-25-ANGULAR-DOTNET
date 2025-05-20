@@ -1,0 +1,149 @@
+<div class="main-content">
+    <div class="header">
+        <h1>Create operation type</h1>
+    </div>
+    <div class="summary">
+        <div class="my-2">
+            <div class="operation-type-form-container">
+                <form class="operation-type-form" [formGroup]="operationTypeForm">
+                    <div class="mb-3 name">
+                        <label for="name">Name:</label>
+                        <input class="form-control" type="text" id="name" formControlName="name" />
+                    </div>
+
+                    <div>
+                        <label class="mb-2">Phases</label>
+                        
+                        <div class="mb-3 preparationPhase" style="margin-left: 20px;">
+                            <label class="mb-2" for="preparationPhase">Anesthesia/patient preparation:</label>
+                            <div style="margin-left: 12px;">
+
+                                <label for="preparationPhaseDuration" style="margin-left: 8px;">Duration:</label>
+                                <input class="form-control" type="number" min="1" step="1" max="999" 
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                id="preparationPhaseDuration" formControlName="preparationPhaseDuration" 
+                                style="width: 100px; margin-left: 8px;"/>
+
+                                <div formArrayName="preparationPhaseSpecializations" style="margin-left: 0px;">
+                                    <table class="table" style="margin-left: 0px;">
+                                        <tbody class="row" *ngFor="let spec of preparationPhaseSpecializations.controls; let i = index" [formGroupName]="i">
+                                            <tr class="mb-1">
+                                            <td>
+                                                <label for="specialization">Specialization:</label>
+                                                <select class="form-select mb-1" id="specialization"
+                                                    formControlName="specialization" style="width: 400px;">
+                                                    <option *ngFor="let specialization of specializations" [value]="specialization.id">
+                                                        {{specialization.name}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <label for="count">Count:</label>
+                                                <input class="form-control" type="number" min="1" step="1" max="99" 
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                                id="count" formControlName="count" style="width: 100px;"/>
+                                            </td>
+                                            <td>
+                                                <br>
+                                                <button class="btn btn-danger" (click)="removeSpecialization('preparationPhaseSpecializations',i)">Remove specialization</button>
+                                            </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button class="btn btn-danger" (click)="addSpecialization('preparationPhaseSpecializations')">Add specialization</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 surgeryPhase" style="margin-left: 20px;">
+                            <label class="mb-2" for="surgeryPhase">Surgery:</label>
+                            <div style="margin-left: 12px;">
+
+                                <label for="surgeryPhaseDuration" style="margin-left: 8px;">Duration:</label>
+                                <input class="form-control" type="number" min="1" step="1" max="999" 
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                id="surgeryPhaseDuration" formControlName="surgeryPhaseDuration" 
+                                style="width: 100px; margin-left: 8px;"/>
+
+                                <div formArrayName="surgeryPhaseSpecializations" style="margin-left: 0px;">
+                                    <table class="table" style="margin-left: 0px;">
+                                        <tbody class="row" *ngFor="let spec of surgeryPhaseSpecializations.controls; let i = index" [formGroupName]="i">
+                                            <tr class="mb-1">
+                                            <td>
+                                                <label for="specialization">Specialization:</label>
+                                                <select class="form-select mb-1" id="specialization"
+                                                    formControlName="specialization" style="width: 400px;">
+                                                    <option *ngFor="let specialization of specializations" [value]="specialization.id">
+                                                        {{specialization.name}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <label for="count">Count:</label>
+                                                <input class="form-control" type="number" min="1" step="1" max="99" 
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                                id="count" formControlName="count" style="width: 100px;"/>
+                                            </td>
+                                            <td>
+                                                <br>
+                                                <button class="btn btn-danger" (click)="removeSpecialization('surgeryPhaseSpecializations',i)">Remove specialization</button>
+                                            </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button class="btn btn-danger" (click)="addSpecialization('surgeryPhaseSpecializations')">Add specialization</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 cleaningPhase" style="margin-left: 20px;">
+                            <label class="mb-2" for="cleaningPhase">Cleaning:</label>
+                            <div style="margin-left: 12px;">
+
+                                <label for="cleaningPhaseDuration" style="margin-left: 8px;">Duration:</label>
+                                <input class="form-control" type="number" min="1" step="1" max="999" 
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                id="cleaningPhaseDuration" formControlName="cleaningPhaseDuration" 
+                                style="width: 100px; margin-left: 8px;"/>
+
+                                <div formArrayName="cleaningPhaseSpecializations" style="margin-left: 0px;">
+                                    <table class="table" style="margin-left: 0px;">
+                                        <tbody class="row" *ngFor="let spec of cleaningPhaseSpecializations.controls; let i = index" [formGroupName]="i">
+                                            <tr class="mb-1">
+                                            <td>
+                                                <label for="specialization">Specialization:</label>
+                                                <select class="form-select mb-1" id="specialization"
+                                                    formControlName="specialization" style="width: 400px;">
+                                                    <option *ngFor="let specialization of specializations" [value]="specialization.id">
+                                                        {{specialization.name}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <label for="count">Count:</label>
+                                                <input class="form-control" type="number" min="1" step="1" max="99" 
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                                id="count" formControlName="count" style="width: 100px;"/>
+                                            </td>
+                                            <td>
+                                                <br>
+                                                <button class="btn btn-danger" (click)="removeSpecialization('cleaningPhaseSpecializations',i)">Remove specialization</button>
+                                            </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button class="btn btn-danger" (click)="addSpecialization('cleaningPhaseSpecializations')">Add specialization</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-danger" (click)="createOperationType()">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

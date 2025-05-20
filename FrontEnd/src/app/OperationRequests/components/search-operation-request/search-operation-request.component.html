@@ -1,0 +1,153 @@
+<router-outlet></router-outlet>
+<div class="main-content">
+    <div class="header">
+        <h1>Operation requests</h1>
+    </div>
+
+    <div class="summary">
+        <div class="my-4">
+            <div class="filters">
+                <div class="mb-4">
+                    <form class="operation-request-form" [formGroup]="filtersForm">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Patient name</th>
+                                    <th>Patient Medical record number</th>
+                                    <th>Operation type</th>
+                                    <th>Priority</th>
+                                    <th>Deadline range</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="patientName"
+                                            formControlName="patientNameFilter" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="patientMedicalRecordNumber"
+                                            formControlName="patientMedicalRecordNumberFilter" />
+                                    </td>
+                                    <td>
+                                        <select class="form-select form-select" id="operationType"
+                                            formControlName="operationTypeFilter">
+                                            <option [value]=""></option>
+                                            <option *ngFor="let opType of operationTypes" [value]="opType.id">
+                                                {{ opType.name }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-select form-select" id="priority"
+                                            formControlName="priorityFilter">
+                                            <option [value]=""></option>
+                                            <option value="Elective">Elective</option>
+                                            <option value="Urgent">Urgent</option>
+                                            <option value="Emergency">Emergency</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="date" max="2999-12-31" id="startDate"
+                                            formControlName="startDateFilter" [(ngModel)]="dateSent"
+                                            (input)="changeDate()" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="date" [min]="minDate" max="2999-12-31"
+                                            id="endDate" formControlName="endDateFilter" [value]="minValue" />
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-danger" (click)="searchWithFilters()">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+            <div class="operation-requests-table">
+                <table class="table" matSort (matSortChange)="sortData($event)">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th mat-sort-header="patient" scope="col">Patient</th>
+                            <th mat-sort-header="operationType" scope="col">
+                                Operation Type
+                            </th>
+                            <th mat-sort-header="priority" scope="col">Priority</th>
+                            <th mat-sort-header="deadlineDate" scope="col">Deadline Date</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let operation of operationRequestModelList; let index = index">
+                            <th class="table-item" scope="row">{{ index + 1 }}</th>
+                            <td class="table-item">
+                                {{ operation.patient.id }} - {{ operation.patient.fullName }}
+                            </td>
+                            <td class="table-item">{{ operation.operationType.name }}</td>
+                            <td class="table-item">{{ operation.priority }}</td>
+                            <td class="table-item">{{ operation.deadLineDate.toLocaleDateString() }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger m-2" (click)="createAppointment(operation)"
+                                    [disabled]="!(operation.status.toLowerCase()=='pending')">
+                                    <i class="fa-solid fa-calendar"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger m-2"
+                                    (click)="editOperationRequest(operation)">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger m-2"
+                                    (click)="selectOperationRequestToRemove(operation, index)" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Confirm Remove Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    Remove Operation Request
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to remove operation request for patient:
+                                {{ selectedOperationRequest.patient.fullName }}?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                    (click)="removeOperationRequest()">
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (operationRequestModelList?.length==0) {
+    <div class="text-center">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-danger" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+    }
+</div>

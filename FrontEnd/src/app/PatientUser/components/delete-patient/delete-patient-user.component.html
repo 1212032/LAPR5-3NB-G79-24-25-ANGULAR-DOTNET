@@ -1,0 +1,15 @@
+<div class="main-content">
+    <div class="header">
+        <h1>Request profile deletion</h1>
+    </div>
+    <div class="summary">
+        <div class="my-2">
+            <div class="patient-form-container">
+                <label>Are you sure you want to request to delete your profile?</label><br><br>
+                <button type="submit" class="btn btn-danger" (click)="requestPatientDeletion()" [disabled]="!patientFound">
+                    Request profile deletion
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

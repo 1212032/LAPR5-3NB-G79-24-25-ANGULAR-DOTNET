@@ -1,0 +1,138 @@
+<div class="main-content">
+  <div class="header">
+    <h1>Create Patient</h1>
+  </div>
+  <div class="summary">
+    <div class="my-2">
+      <div class="patient-form-container">
+        <form class="patient-form" [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+          <!-- First Name -->
+          <div class="mb-3">
+            <label for="firstName">First Name:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="firstName"
+              formControlName="firstName"
+              placeholder="Enter the first name"
+            />
+            <div
+              *ngIf="patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched"
+              class="error-message"
+            >
+              First name is required.
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div class="mb-3">
+            <label for="lastName">Last Name:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="lastName"
+              formControlName="lastName"
+              placeholder="Enter the last name"
+            />
+            <div
+              *ngIf="patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched"
+              class="error-message"
+            >
+              Last name is required.
+            </div>
+          </div>
+
+          <!-- Gender -->
+          <div class="mb-3">
+            <label for="gender">Gender:</label>
+            <select class="form-control" id="gender" formControlName="gender">
+              <option value="" disabled>Select gender</option>
+              <option value="Man">Man</option>
+              <option value="Woman">Woman</option>
+            </select>
+            <div
+              *ngIf="patientForm.get('gender')?.invalid && patientForm.get('gender')?.touched"
+              class="error-message"
+            >
+              Gender is required.
+            </div>
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="mb-3">
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input
+              class="form-control"
+              type="date" max="2999-12-31"
+              id="dateOfBirth"
+              formControlName="dateOfBirth"
+            />
+            <div
+              *ngIf="patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched"
+              class="error-message"
+            >
+              Date of birth is required.
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="mb-3">
+            <label for="address">Address:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="address"
+              formControlName="address"
+              placeholder="Enter the address"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div class="mb-3">
+            <label for="phone">Phone:</label>
+            <input
+              class="form-control"
+              type="tel"
+              id="phone"
+              formControlName="phone"
+              placeholder="Enter phone number"
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email">Email:</label>
+            <input
+              class="form-control"
+              type="email"
+              id="email"
+              formControlName="email"
+              placeholder="Enter email"
+            />
+            <div
+              *ngIf="patientForm.get('email')?.invalid && patientForm.get('email')?.touched"
+              class="error-message"
+            >
+              Please enter a valid email address.
+            </div>
+          </div>
+
+          <!-- Emergency Contact -->
+          <div class="mb-3">
+            <label for="emergencyContact">Emergency Contact:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="emergencyContact"
+              formControlName="emergencyContact"
+              placeholder="Enter the emergency contact"
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-danger">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

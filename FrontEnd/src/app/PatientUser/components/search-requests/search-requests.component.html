@@ -1,0 +1,76 @@
+<router-outlet></router-outlet>
+<div class="main-content">
+    <div class="header">
+        <h1>Patient Requests</h1>
+    </div>
+
+    <div class="summary">
+        <div class="my-4">
+            <div class="requests-table" style="overflow-x:scroll;">
+                <table class="table" matSort (matSortChange)="sortData($event)">
+                    <thead>
+                        <tr>
+                            <th mat-sort-header="requestDateTime" scope="col">Date Time</th>
+                            <th mat-sort-header="requestType" scope="col">Request type</th>
+                            <th mat-sort-header="requestedBy" scope="col">Requested by</th>
+                            <th mat-sort-header="firstName" scope="col">First name</th>
+                            <th mat-sort-header="lastName" scope="col">Last name</th>
+                            <th mat-sort-header="emergencyContact" scope="col">Emergency contact</th>
+                            <th mat-sort-header="phone" scope="col">Phone</th>
+                            <th mat-sort-header="address" scope="col">Address</th>
+                            <th mat-sort-header="email" scope="col">Email</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of requestsList; let index = index">
+                            <td class="table-item" style="min-width:200px;">{{ request.requestDateTimeString }}</td>
+                            <td class="table-item" style="min-width:130px;">{{ request.requestType }}</td>
+                            <td class="table-item" style="min-width:150px;">{{ request.requestedBy }}</td>
+                            <td class="table-item" style="min-width:150px;">{{ request.firstName }}</td>
+                            <td class="table-item" style="min-width:150px;">{{ request.lastName }}</td>
+                            <td class="table-item" style="min-width:200px;">{{ request.emergencyContact }}</td>
+                            <td class="table-item" style="min-width:200px;">{{ request.phone }}</td>
+                            <td class="table-item" style="min-width:200px;">{{ request.address }}</td>
+                            <td class="table-item" style="min-width:200px;">{{ request.email }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" (click)="selectedRequest(request)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">Confirm patient request deletion?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="deleteRequest()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(requestsList==null) {
+<div class="text-center">
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,63 @@
+<div class="main-content">
+  <div class="header">
+    <h1>Create Specialization</h1>
+  </div>
+
+  <div class="summary">
+    <div class="specialization-form-container">
+      <form [formGroup]="createForm" (ngSubmit)="createSpecialization()">
+        <div class="form-group">
+          <label for="code">Code:</label>
+          <input
+            type="text"
+            id="code"
+            formControlName="code"
+            class="form-control"
+            placeholder="Enter Specialization Code"
+          />
+          <div *ngIf="createForm.get('code')?.invalid && createForm.get('code')?.touched" class="error-message">
+            <small *ngIf="createForm.get('code')?.errors?.['required']">Code is required.</small>
+            <small *ngIf="createForm.get('code')?.errors?.['minlength']">Code must be at least 3 characters long.</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="form-control"
+            placeholder="Enter Specialization Name"
+          />
+          <div *ngIf="createForm.get('name')?.invalid && createForm.get('name')?.touched" class="error-message">
+            <small *ngIf="createForm.get('name')?.errors?.['required']">Name is required.</small>
+            <small *ngIf="createForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters long.</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            class="form-control"
+            placeholder="Enter Specialization Description"
+          ></textarea>
+          <div
+            *ngIf="createForm.get('description')?.invalid && createForm.get('description')?.touched"
+            class="error-message"
+          >
+            <small *ngIf="createForm.get('description')?.errors?.['required']">Description is required.</small>
+            <small *ngIf="createForm.get('description')?.errors?.['maxlength']">
+              Description cannot exceed 200 characters.
+            </small>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Specialization</button>
+      </form>
+    </div>
+  </div>
+</div>
+

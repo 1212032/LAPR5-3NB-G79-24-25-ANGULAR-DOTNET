@@ -1,0 +1,74 @@
+.main-content {
+  margin-left: 270px;
+  padding: 20px;
+}
+
+.header {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  text-align: left;
+}
+
+.summary {
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.filters .form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}
+
+.no-results {
+  margin-top: 20px;
+  font-style: italic;
+  color: #666;
+}
+
+.btn {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #c82333;
+}
+
+.m-2 {
+  margin: 5px;
+}

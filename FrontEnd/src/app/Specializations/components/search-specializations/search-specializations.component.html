@@ -1,0 +1,73 @@
+<div class="main-content">
+  <div class="header">
+    <h1>Search Specializations</h1>
+  </div>
+
+  <div class="summary">
+    <div class="my-4">
+      <!-- Search Form -->
+      <div class="filters">
+        <form [formGroup]="searchForm" (ngSubmit)="searchSpecializations()" class="specialization-search-form">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" class="form-control" id="code" formControlName="code" placeholder="Enter Code" /></td>
+                <td><input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter Name" /></td>
+                <td><input type="text" class="form-control" id="description" formControlName="description" placeholder="Enter Description" /></td>
+                <td>
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+
+      <!-- Results -->
+      <div class="specializations-table" *ngIf="specializations && specializations.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let specialization of specializations; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ specialization.code }}</td>
+              <td>{{ specialization.name }}</td>
+              <td>{{ specialization.description }}</td>
+              <td>
+                <button type="button" class="btn btn-danger m-2" (click)="editSpecialization(specialization)">
+                  <i class="fa-solid fa-pencil"></i>
+                </button>
+                <button type="button" class="btn btn-danger m-2" (click)="deleteSpecialization(specialization)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No Results Message -->
+      <div class="no-results" *ngIf="specializations && specializations.length === 0">
+        <p>No specializations found with the provided criteria.</p>
+      </div>
+    </div>
+  </div>
+</div>

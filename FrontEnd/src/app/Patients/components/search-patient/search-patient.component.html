@@ -1,0 +1,89 @@
+<div class="main-content">
+    <div class="header">
+        <h1>Search Patients</h1>
+    </div>
+
+    <div class="summary">
+        <div class="my-4">
+            <!-- Search Form -->
+            <div class="filters">
+                <div class="mb-4">
+                    <form [formGroup]="searchForm" (ngSubmit)="searchPatients()" class="patient-search-form">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Date of Birth</th>
+                                    <th>Medical Record Number</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" class="form-control" id="name" formControlName="name"
+                                            placeholder="Enter Name" />
+                                    </td>
+                                    <td><input type="email" class="form-control" id="email" formControlName="email"
+                                            placeholder="Enter Email" /></td>
+                                    <td><input type="date" class="form-control" id="dateOfBirth"
+                                            formControlName="dateOfBirth" /></td>
+                                    <td><input type="text" class="form-control" id="medicalRecordNumber"
+                                            formControlName="medicalRecordNumber" placeholder="Medical Record Number" />
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="patients-table" *ngIf="patients && patients.length > 0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let patient of patients; let index = index">
+                            <td class="table-item">{{ index + 1 }}</td>
+                            <td class="table-item">{{ patient.firstName }} {{ patient.lastName }}</td>
+                            <td class="table-item">{{ patient.email }}</td>
+                            <td class="table-item">{{ patient.dateOfBirth | date }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger m-2" (click)="editPatient(patient)"
+                                    [hidden]="!canUpdateDelete()">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger m-2" (click)="deletePatient(patient)"
+                                    [hidden]="!canUpdateDelete()">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger m-2" (click)="editPatient(patient)"
+                                    [hidden]="canUpdateDelete()">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- No Results Message -->
+            <div class="no-results" *ngIf="patients && patients.length === 0">
+                <p>No patients found with the provided criteria.</p>
+            </div>
+        </div>
+    </div>
+</div>

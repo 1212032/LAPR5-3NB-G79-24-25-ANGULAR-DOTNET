@@ -1,0 +1,73 @@
+<div class="main-content">
+  <div class="header">
+    <h1>New operation request</h1>
+  </div>
+  <div class="summary">
+    <div class="my-2">
+      <div class="operation-request-form-container">
+        <form class="operation-request-form" [formGroup]="operationRequestForm">
+          <div class="mb-3 deadlineDate">
+            <label for="dateOfBirth">Deadline date:</label>
+
+            <input
+              matInput
+              class="form-control"
+              type="date" 
+              name="deadlineDate" 
+              [min]="minDate"
+              [(ngModel)]="selectedDate"
+              max="2999-12-31"
+              id="deadlineDate"
+              placeholder="dd-mm-yyyy"
+              formControlName="deadlineDate"
+              [value]="minDate"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="gender">Priority:</label>
+            <select
+              class="form-select form-select mb-3"
+              id="priority"
+              formControlName="priority"
+            >
+              <option value="Elective">Elective</option>
+              <option value="Urgent">Urgent</option>
+              <option value="Emergency">Emergency</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="operationType">Operation type:</label>
+            <select
+              class="form-select form-select mb-3"
+              id="operationType"
+              formControlName="operationType"
+            >
+              <option *ngFor="let opType of operationTypes" [value]="opType.id">
+                {{opType.name}}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="patient">Patient:</label>
+            <select
+              class="form-select form-select mb-3"
+              id="patientMedicalRecordNumber"
+              formControlName="patientMedicalRecordNumber"
+            >
+            <option *ngFor="let patient of patients" [value]="patient.id">
+                {{patient.id}} - {{patient.fullName}} 
+            </option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-danger"
+            (click)="createOperationRequest()"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

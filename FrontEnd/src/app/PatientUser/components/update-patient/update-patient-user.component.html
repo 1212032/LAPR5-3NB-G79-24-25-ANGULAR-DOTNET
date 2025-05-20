@@ -1,0 +1,54 @@
+<div class="main-content">
+    <div class="header">
+        <h1>Request profile update</h1>
+    </div>
+    <div class="summary">
+        <div class="my-2">
+            <div class="patient-form-container">
+                <form class="patient-form" [formGroup]="patientForm">
+                    <div class="mb-3 firstName">
+                        <label for="firstName">First name:</label>
+                        <input class="form-control" type="text" id="firstName" formControlName="firstName" />
+                    </div>
+                    <div class="mb-3 lastName">
+                        <label for="lastName">Last name:</label>
+                        <input class="form-control" type="text" id="lastName" formControlName="lastName" />
+                    </div>
+                    <div class="mb-3 email">
+                        <label for="email">Email:</label>
+                        <input class="form-control" type="email" id="email" formControlName="email" />
+                    </div>
+                    <div class="mb-3 phone">
+                        <label for="phone">Phone:</label>
+                        <input class="form-control" type="text" id="phone" formControlName="phone" />
+                    </div>
+                    <div class="mb-3 emergencyContact">
+                        <label for="emergencyContact">Emergency contact:</label>
+                        <input class="form-control" type="text" id="emergencyContact"
+                            formControlName="emergencyContact" />
+                    </div>
+                    <div class="mb-3 address">
+                        <label for="address">Address:</label>
+                        <input class="form-control" type="text" id="address" formControlName="address" />
+                    </div>
+                    <div class="mb-3 dateOfBirth">
+                        <label for="dateOfBirth">Date of birth:</label>
+                        <input class="form-control" type="date" max="2999-12-31" id="dateOfBirth"
+                            formControlName="dateOfBirth" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender">Gender:</label>
+                        <select class="form-select" id="gender" formControlName="gender">
+                            <option value="Man">Man</option>
+                            <option value="Woman">Woman</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger" (click)="requestPatientUpdate()" [disabled]="buttonDisabled">
+                        Request profile update
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
